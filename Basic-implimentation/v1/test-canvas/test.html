@@ -1,0 +1,36 @@
+<script >
+
+
+
+    const m = new Map()
+    const n = "holabonita"
+
+    class Src {
+        constructor(){
+            this.unique = Math.random()
+            this.flag = false
+        }
+    }
+    m.set(n, [])
+    console.log(m.get(n))
+
+    let u0 = m.get(n)
+    u0.push(new Src())
+    console.log(m.get(n)[0])
+
+    //update
+    let u = m.get(n)
+    u.forEach(i=>i.flag=true)
+    console.log(m.get(n)[0])
+
+
+
+
+
+
+
+
+
+
+
+</script>

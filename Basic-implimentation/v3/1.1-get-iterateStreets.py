@@ -1,6 +1,6 @@
 import overpass
 from time import sleep
-from helpers import out, RONSE_STREETS, printProgress
+from _helpers import out, RONSE_STREETS, printProgress
 
 data_streets = {}
 

@@ -9,10 +9,10 @@ RONSE_STREETS = [ "Barreelstraat", "Blauwesteen", "Boontjesstraat", "Bossenberg"
 # output data in json format
 def out(json_dict, path=None):
     if not path:
-        path = '..//data'
+        path = './data/'
     filename = os.path.basename(sys.argv[0]).split('.')[0]
     
-    with open(path+"/ronse-"+filename+"-"+str(randint(0,999))+".json", "w") as outfile:
+    with open(path+"ronse-"+filename+"-"+str(randint(0,999))+".json", "w") as outfile:
         json.dump(json_dict, outfile, indent=4, sort_keys=False)
         
 

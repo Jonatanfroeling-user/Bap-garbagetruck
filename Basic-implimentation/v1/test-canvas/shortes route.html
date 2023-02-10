@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+    body {
+        background-color: rgb(0, 42, 255);
+        padding: 0;
+        margin:0;
+        overflow:hidden;
+    }
+
+    canvas {
+        background-color: rgb(255, 255, 255);
+        width: 100vw;
+        height: 100vh;
+    }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script onload="true">
+
+                    // setup canvas
+            const cnv = document.querySelector("canvas");
+            cnv.width = window.innerWidth
+            cnv.height = window.innerHeight
+
+            const ctx = cnv.getContext("2d");
+            ctx.font = "20px Helvetica"
+
+            // array to store the cities
+            let cities = [
+                {x: 100, y: 100},
+                {x: 200, y: 200},
+                {x: 300, y: 50},
+                {x: 400, y: 150},
+                {x: 450, y: 250},
+                {x: 350, y: 350},
+                {x: 450, y: 350},
+                {x: 500, y: 400},
+                {x: 600, y: 500},
+                {x: 100, y: 500},
+                {x: 200, y: 400},
+                {x: 200, y: 350},
+
+
+
+            ];
+
+            cites = []
+            for(let i=0;i<20;i++){
+                cities.push({x: Math.random() * cnv.width, y: Math.random() * cnv.height})
+            }
+            
+
+            // function to draw a line between two cities
+            function drawLine(from, to, nr) {
+                ctx.beginPath();
+                ctx.moveTo(from.x, from.y);
+                ctx.lineTo(to.x, to.y);
+                ctx.stroke();
+            }
+
+            // function to draw the TSP path
+            function drawTSPPath(path) {
+                for (let i = 0; i < path.length - 1; i++) {
+                    ctx.strokeStyle = `hsl(${360/path.length*i}deg,50%,50%)`
+                    drawLine(cities[path[i]], cities[path[i + 1]]);
+                    ctx.fillText(String(i), cities[path[i]].x, cities[path[i]].y)
+
+                }
+            }
+
+            // function to find the TSP path using the nearest neighbor algorithm
+            function findTSPPath() {
+                let path = [0];
+                let currentCity = 0;
+                let visited = new Array(cities.length).fill(false);
+                visited[0] = true;
+                for (let i = 0; i < cities.length - 1; i++) {
+                    let nearestCity = -1;
+                    let nearestDistance = Number.MAX_VALUE;
+                    for (let j = 0; j < cities.length; j++) {
+                        if (!visited[j]) {
+                            let distance = Math.sqrt(Math.pow(cities[currentCity].x - cities[j].x, 2) + Math.pow(cities[currentCity].y - cities[j].y, 2));
+                            if (distance < nearestDistance) {
+                                nearestCity = j;
+                                nearestDistance = distance;
+                            }
+                        }
+                    }
+                    currentCity = nearestCity;
+                    visited[currentCity] = true;
+                    path.push(currentCity);
+                }
+                return path;
+            }
+
+            // main function to draw the TSP path on the canvas
+            function draw() {
+                ctx.strokeStyle = '#aaa'
+                for(let a of cities){
+                    for(let b of cities){
+                        drawLine(a, b, 1)
+                    }
+                }
+                ctx.strokeStyle = 'red'
+                ctx.lineWidth = 5
+
+                let path = findTSPPath();
+                drawTSPPath(path);
+            }
+
+
+            draw();
+
+    </script>
+    
+</body>
+</html>

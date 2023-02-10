@@ -1,5 +1,5 @@
 import folium, json
-from helpers import getHtmlName
+from _helpers import getHtmlName
 from random import randint, choice
 
 # Define the location of Ronse
@@ -10,7 +10,7 @@ ronse_longitude = 3.57
 m = folium.Map(location=[ronse_latitude, ronse_longitude], zoom_start=13)
 
 
-data = json.load(open("../data/ronse-allStreets-146.json", "r"))
+data = json.load(open("./data/ronse-allStreets-146.json", "r"))
 
 """
 example data:
