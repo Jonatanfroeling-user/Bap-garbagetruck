@@ -23,6 +23,6 @@ def printProgress(done, max=100, msg=''):
     
     
 def getHtmlName():
-    path = './sketches/'
+    path = './'
     filename = os.path.basename(sys.argv[0]).split('.')[0]
     return path+filename+"-"+str(randint(0,999))+".html"
