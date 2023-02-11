@@ -35,7 +35,7 @@ def main(osmfile):
 
 handler = StreetsHandler()
 
-
+# you need to donwload these files
 osm_file = f"./ronse2.osm.pbf"
 osm_file = f"./ronse1.osm"
 

@@ -1,0 +1,4 @@
+geopandas==0.12.2
+osmium==3.6.0
+pandas==1.5.3
+shapely==2.0.1

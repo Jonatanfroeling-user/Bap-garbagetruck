@@ -1,0 +1,3 @@
+folium==0.14.0
+overpass==0.7
+plotly==5.13.0
