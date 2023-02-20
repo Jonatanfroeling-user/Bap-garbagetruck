@@ -1,8 +1,3 @@
-const ROUTES={}
-const routed = [...(raw.map(i=>Object.values(i).flat())).flat()]
-const centerpt=[300, 300]
-ctx.invert()
-
 
 const raw = [{"street_a":[    
     [300, 300],
@@ -14,6 +9,14 @@ const raw = [{"street_a":[
     [680, 550],
 ]}
 ]
+
+const ROUTES={}
+const steps=8
+const routed = [...(raw.map(i=>Object.values(i).flat())).flat()]
+const centerpt=[300, 300]
+// ctx.invert()
+
+
 
 
 function getDis(a, b) {
@@ -32,9 +35,6 @@ function getMid(a, b) {
     return getPosTo(a, b, getDis(a, b) / 2)
 }
 
-
-
-
 function subdevide() {
     mids.reduce((t, c) => {
         if (t) mids.push(getMid(t, c))
@@ -43,7 +43,7 @@ function subdevide() {
     }, null)
 }
 
-const steps=8
+
 
 function getIntermediate(a,b){
     const res=[]
@@ -111,7 +111,7 @@ function tellPos(p){
     draw()
     point(p.pageX,p.pageY,10, "red")
     const pts=getIntermediate(centerpt, [p.pageX,p.pageY])
-    pts.forEach(i=>point(...i,5,"pink"))
+    pts.forEach(i=>point(...i,5,"green"))
     fillText(pts.length,p.pageX,p.pageY)
 
 }

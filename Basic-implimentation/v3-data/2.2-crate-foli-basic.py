@@ -10,7 +10,7 @@ m = folium.Map(location=[ronse_latitude, ronse_longitude], zoom_start=13)
 
 
 data = {}
-with open("./data/StreetsAll.json", "r") as read_file:
+with open("../data/StreetsAll.json", "r") as read_file:
     data = json.load(read_file)
 
 

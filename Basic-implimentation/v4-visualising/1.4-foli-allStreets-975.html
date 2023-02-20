@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script>
+        L_NO_TOUCH = true;
+        L_DISABLE_3D = true;
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+        #MAP {
+            height: 90vh !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js">
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" />
+
+    <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        #MAP {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        }
+
+        .leaflet-container {
+            font-size: 1rem;
+        }
+
+        #stats{
+            padding: 1rem;
+        }
+
+        #stats >*{
+            margin: 1rem 0;
+            outline: none
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="folium-map" id="MAP"></div>
+</body>
+<script src="./1.4+helpers.js"></script>
+
+
+
+<script onload="">
+    /**
+    new:
+    - each street is stored in a coordinate aeear
+
+
+
+
+
+    **/
+
+
+
+
+    // a street node point
+    class StreetNode {
+        constructor(coords, partId, street){
+            this.coords = coords
+            this.partId = partId
+            this.id = JSON.stringify(coords)
+
+            this.street = street
+            this.checked = false
+        }
+        setDone(){
+            this.checked = true
+            this.street.displayStats()
+        }
+        isDone(){
+            return !!this.checked
+        }
+        // some streets share the same coordinate
+        addDuplicateStreet(name){
+            this.streets.push(name)
+        }
+    }
+
+    // a street part, multiple nodes
+    class StreetPart {
+        constructor(nodes, id, street){
+            this.nodes = nodes
+            this.partId = id
+            this.street = street
+
+            this.rawNodes = [...nodes.values()].map(i=>i.coords)
+            this.finished = false
+        }
+    }
+
+
+    // a street, multiple street parts
+    class Street {
+        constructor(name, statElm){
+            this.element = statElm
+            this.name = name
+            this.parts = new Map()
+            this.nodes = []
+            this.max = 0
+            this.progress = 0
+        }
+        addPart(nodes, partId){
+            this.parts.set(this.parts.size, new StreetPart(nodes, partId, this))
+            this.max += nodes.size
+            this.nodes.push(...nodes.values())
+        }
+
+        displayStats(){
+            this.progress = this.nodes.filter(i=>i.checked).length
+            this.element.innerHTML = `${this.name} - &#09; ${Math.round((this.progress/this.max)*100)}% - ${this.progress}/${this.max} ${this.progress === this.max ? "-----DONE" : ''}`
+        }
+    }
+
+    // truck, player
+    class Truck {
+        constructor(id, targets){
+            this.id=id
+            this.targets=targets
+            this.destinations = []
+
+            this.checkedCoords = new Set()
+        }
+        checkArea(coord){
+            // 3.6xxxxx
+            // 50.7xxxxx
+
+            for (let x = -this.lookrange; x < this.lookrange; x++) {
+                for (let y = -this.lookrange; y < this.lookrange; y++) {
+
+                    if(x%this.searchDetail==0 && y%this.searchDetail==0) {
+                        const n = JSON.stringify([x,y])
+                        Overview.check(n)
+                    }
+                }
+            }
+            
+        }
+        
+    }
+    
+    // lookup grid to check if truck is in area of point
+    // each node will be a designated part of the grid
+    const Grid = {
+        nodes: new Map(),
+        // Seach detali is how much off a ndoe coordinates can be
+        // 1 = 50.000001
+        // 10= 50.000010
+        searchDetail:3,
+        // all points in this area will be checked
+        lookrange: 50,
+        // checkes for poitns in area
+        // optimally use spiral: https://stackoverflow.com/questions/3706219/algorithm-for-iterating-over-an-outward-spiral-on-a-discrete-2d-grid-from-the-or
+        checkArea(coord){
+            for (let x = -this.lookrange; x < this.lookrange; x++) {
+                for (let y = -this.lookrange; y < this.lookrange; y++) {
+
+                    if(x%this.searchDetail==0 && y%this.searchDetail==0) {
+                        const n = JSON.stringify([x,y])
+                        if(this.checkedCoords.has(n)) continue
+                        Overview.check(n)
+                        this.checkedCoords.add(n)
+                    }
+                }
+            }
+        }
+    }
+
+    
+
+    // overview of all data, basically all data related to the roads
+    const Overview = {
+        // store all elements by street name.
+        allStreets: new Map(),
+        // store all streets by coordinates. 
+        // Used for reversed lookup the road by coordinates
+        reverseLookup: new Map(),
+        parentElement: document.createElement('div'),
+        done: 0,
+        todo: 100,
+
+        grid: new Map(),
+        // init area of 4 coordinates of the map
+        // created layout of the streets
+        initMap(area=0){
+            // adds streets routes
+            this.allStreets.forEach(street=>{
+                street.parts.forEach(p=>{
+                    createMarker(p.street.name, p.rawNodes, `hsl(${randint(0,360)},${50}%, ${50}%, 0.5)`, 5)
+                })
+            })
+            return
+            const [a,b]=ronseArea
+            const disX = getDis([b[0],b[1]],[a[0],b[1]])
+            const disY = getDis([b[0],b[1]],[b[0],a[1]])
+            const m =[]
+            const detail = stepDestail*10
+
+            let _x,_y;
+            for (let x = b[0]; x < a[0]; x+=detail) {
+                for (let y = b[1]; y < a[1]; y+=detail) {
+                    _x = toFixed(x, 8);
+                    _y = toFixed(y, 8);
+                    log(_x, _y)
+                    if(_x%detail==0 && _y%detail==0) {
+                        log(1)
+                        const n = JSON.stringify([x,y])
+                        m.push(n)
+                        continue
+                        if(this.checkedCoords.has(n)) continue
+                        Overview.check(n)
+                        this.checkedCoords.add(n)
+                    }
+                }
+            }
+            log(m)
+            
+        },
+        // mechanism convertign all json data into objects
+        // note: all nodes are only created once and share the reference to their street
+        addStreet(name, parts){
+            const statsElm = document.createElement('p')
+            const street = new Street(name, statsElm)
+
+            for(let rawPart of parts) {
+                const {coords, id} = rawPart
+
+                const _part = []
+                // add in between waypoints
+                coords.reduce((t,c)=>{
+                    if(t){
+                        _part.push(...getIntermediate(t,c))
+                        _part.push(c)
+                    }
+                    return c
+                })
+                allDestinations.push(..._part)
+
+
+                const nodes = new Map([..._part.map(i=>[JSON.stringify(i), new StreetNode(i, id, street)])])
+                street.addPart(nodes, id)
+
+                nodes.forEach((k,v)=>{
+                    if(this.reverseLookup.has(v)){
+                        this.reverseLookup.set(v,[...this.reverseLookup.get(v),k])
+                    } else this.reverseLookup.set(v,[k])
+                })
+            }
+
+            this.allStreets.set(name, street)
+            this.parentElement.appendChild(statsElm)
+        },
+        // intis state, required for stats
+        initStats(){
+            this.parentElement.id = "stats"
+            document.body.appendChild(this.parentElement)
+            this.allStreets.forEach(s=>s.displayStats())
+        },
+        // updates node state 
+        check(id){
+            this.reverseLookup.get(id)?.forEach(n=>{
+                n.setDone(true)
+            })
+        },
+        // logs current state of route
+        getGobalStats(){
+            const r = [...this.reverseLookup.values()].flat()
+            const val = r.filter(i=>i.checked).length/r.length
+            console.info("Current percentage of route:", val.toFixed(2))
+        }
+    }
+
+
+    const allDestinations = []
+
+
+    /** MAIN **/
+    async function main(){
+        const raw = await loadJsonData('ronse-StreetParts-276.json')
+        // iterates all streets
+        for(let content of Object.values(raw)) {
+            Overview.addStreet(content.name, content.parts)
+        }
+        Overview.initMap()
+
+
+
+        const trucky = getIcon(ronseCenter)
+        Overview.initStats()
+
+
+
+        for(let des of allDestinations){
+            await sleep(0.05)
+            trucky.setLatLng(des);
+            Overview.check( JSON.stringify(Object.values(trucky.getLatLng())) )
+            //MAP.setView(trucky.getLatLng(), MAP.getZoom()); 
+            if(allDestinations.indexOf(des)%33==0) Overview.getGobalStats()
+
+        }
+        Overview.getGobalStats()
+
+    }
+
+    document.onload = main()
+
+</script>
+
+
+
+</html>
