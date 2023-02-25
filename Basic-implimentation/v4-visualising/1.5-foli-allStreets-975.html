@@ -78,25 +78,26 @@
     /**
     new:
     - each street is stored in a coordinate aeear
-
-
-
-
-
     **/
+
+
 
 
 
 
     // a street node point
     class StreetNode {
-        constructor(coords, partId, street){
+        constructor(coords, partId, street, inbetweenIdx = 0){
             this.coords = coords
             this.partId = partId
             this.id = JSON.stringify(coords)
 
             this.street = street
             this.checked = false
+            // ref to grid
+            this.gridPoint = null
+            // can be filtered to maximize performance
+            this.inbetweenIdx = inbetweenIdx
         }
         setDone(){
             this.checked = true
@@ -110,6 +111,7 @@
             this.streets.push(name)
         }
     }
+
 
     // a street part, multiple nodes
     class StreetPart {
@@ -155,23 +157,161 @@
 
             this.checkedCoords = new Set()
         }
-        checkArea(coord){
-            // 3.6xxxxx
-            // 50.7xxxxx
+        getPos(){
 
-            for (let x = -this.lookrange; x < this.lookrange; x++) {
-                for (let y = -this.lookrange; y < this.lookrange; y++) {
+        }
+    }
+    
+    // lookup grid to check if truck is in area of point
+    // each node will be a designated part of the grid
+    /* This script will only need to be run once, then sotred in json to minimize calculations for future */
+    class AreaGrid {
+        constructor(area=ronseArea, detail=0.0001){
+            this.area = area
+            this.detail = detail
+            this.searchArea = 10
+            this.iterations = this.searchArea-this.detail
+            this.linkedNodes= new Map()
 
-                    if(x%this.searchDetail==0 && y%this.searchDetail==0) {
-                        const n = JSON.stringify([x,y])
-                        Overview.check(n)
+            //L.rectangle(area, {color: 'orange',fillColor: '#f80',fillOpacity: 0.3}).addTo(MAP);
+
+            const [[x1,y1],[x2,y2]]=this.area
+
+            this.center = {
+                x: (x1+x2)/2,
+                y:(y1+y2)/2,
+            }
+
+            this.areaSize = {
+                x:getDis([x2,y2],[x1,y2]),
+                y:getDis([x2,y2],[x2,y1])
+            }
+
+            this.totalWidth = this.areaSize.x 
+            this.totalHeight = this.areaSize.y
+            this.columns = this.totalWidth/this.detail;
+            this.rows = this.totalHeight/this.detail;
+
+
+            this.marker = L.circle([x1,y1], this.searchArea, {
+                color: 'red',
+                fillColor: '#873',
+                fillOpacity: 0.2,
+            }).addTo(MAP)
+
+
+        }
+        init(){
+            this.rawGridPoints = []
+            this.gridPoints = {}
+            this.linkedGrid = new Map()
+
+
+            let topEdge = this.center.y - (this.totalHeight / 2);
+            let leftEdge= null
+            
+            for (let r = 0; r <= this.rows; r++) {
+                leftEdge = this.center.x - (this.totalWidth / 2);
+                for (let c = 0; c <= this.columns; c++) {
+                    const n = [toFixed(leftEdge,6),toFixed(topEdge,6)]
+                    this.gridPoints[JSON.stringify(n)] = []
+                    this.rawGridPoints.push(n)
+                    //this.gridCells.push({x1:leftEdge,y1:topEdge,x2:leftEdge + this.detail,y2:topEdge + this.detail});
+                    leftEdge += this.detail;
+                }
+                topEdge += this.detail;
+            }
+
+            // assign nodes to grid
+            let dis=Infinity
+            let res = null
+            let node = {}
+            for(let [id, nodes] of Array(...Overview.reverseLookup.entries())){
+                node = nodes[0]
+                dis = Infinity
+                res = null
+               
+                for(let g of this.rawGridPoints){
+                    const d= getDis(node.coords, g)
+                    if(d>this.detail*2) continue
+                    if(d<this.detail && res) break
+                    if(d<dis) {
+                        dis =d
+                        res = g
+                    }
+                }
+                if(!res) {
+                    throw new Error('damn.. no node found :p')
+                }
+
+                this.linkedGrid.set(JSON.stringify(res), id)
+            }
+            log('linked -done')
+
+
+        }
+        checkArea(coords){
+            this.iterations+=this.detail
+            //if(toFixed(this.iterations,6)%toFixed(this.searchArea,6) !== 0)return
+            //this.marker.setLatLng(coords)
+
+
+            const [x,y]=coords
+            let count=0
+
+
+            for(let _x of range(this.searchArea*2).map(i=>Math.floor(x+i-this.searchArea))) {
+                for(let _y of range(this.searchArea*2).map(i=>Math.floor(y+i-this.searchArea))) {
+                    // is grid point
+                    if( _x % this.detail===0 && _y % this.detail===0 )  {
+                        // is within circular radius
+                        if ((_x-x)**2 + (_y-y)**2 <= this.searchArea**2) {
+                            count++
+                            Overview.check(JSON.stringify([x,y]))
+                        }
                     }
                 }
             }
-            
+            //log(count)
+            //exit()
         }
-        
+        checkArea2(coords){
+            this.iterations+=this.detail
+
+            //log(this.searchArea, coords)
+            if(toFixed(this.iterations,6)%toFixed(this.searchArea,6) !== 0)return log(0)
+ 
+            this.marker.setLatLng(coords)
+            let stop = 0
+            for (let x = -this.searchArea; x < this.searchArea; x+=this.detail) {
+                for (let y = -this.searchArea; y < this.searchArea; y+=this.detail) {
+                    x=toFixed(x,6)
+                    y=toFixed(y,6)
+
+
+                    stop++
+                    if(stop>2000) {
+                        throw new Error('overload')
+                        return
+                    }
+
+
+                    if(x%this.detail==0 && y%this.detail==0) {
+                        //log(2)
+                        //Overview.check(JSON.stringify([x,y]))
+                    }
+                }
+            }
+            log(stop)
+
+        }
     }
+
+
+    
+    
+
+
     
 
     // overview of all data, basically all data related to the roads
@@ -185,7 +325,7 @@
         done: 0,
         todo: 100,
 
-        grid: new Map(),
+        grid: new AreaGrid(),
         // init area of 4 coordinates of the map
         // created layout of the streets
         initMap(area=0){
@@ -196,35 +336,7 @@
                 })
             })
 
-            // does not work -- - -- - --  
-            return
-
-
-            const [a,b]=ronseArea
-            const disX = getDis([b[0],b[1]],[a[0],b[1]])
-            const disY = getDis([b[0],b[1]],[b[0],a[1]])
-            const m =[]
-            const detail = stepDestail*10
-
-            let _x,_y;
-            for (let x = b[0]; x < a[0]; x+=detail) {
-                for (let y = b[1]; y < a[1]; y+=detail) {
-                    _x = toFixed(x, 8);
-                    _y = toFixed(y, 8);
-                    log(_x, _y)
-                    if(_x%detail==0 && _y%detail==0) {
-                        log(1)
-                        const n = JSON.stringify([x,y])
-                        m.push(n)
-                        continue
-                        if(this.checkedCoords.has(n)) continue
-                        Overview.check(n)
-                        this.checkedCoords.add(n)
-                    }
-                }
-            }
-            log(m)
-            
+            this.grid.init()
         },
         // mechanism convertign all json data into objects
         // note: all nodes are only created once and share the reference to their street
@@ -286,6 +398,8 @@
 
     /** MAIN **/
     async function main(){
+        console.time('route')
+        allDestinations.length = 0
         const raw = await loadJsonData('ronse-StreetParts-276.json')
         // iterates all streets
         for(let content of Object.values(raw)) {
@@ -303,16 +417,17 @@
         for(let des of allDestinations){
             await sleep(0.05)
             trucky.setLatLng(des);
-            Overview.check( JSON.stringify(Object.values(trucky.getLatLng())) )
+            Overview.grid.checkArea(Object.values(trucky.getLatLng()))
             //MAP.setView(trucky.getLatLng(), MAP.getZoom()); 
-            if(allDestinations.indexOf(des)%33==0) Overview.getGobalStats()
+            //if(allDestinations.indexOf(des)%33==0) Overview.getGobalStats()
 
         }
-        Overview.getGobalStats()
+        //Overview.getGobalStats()
+        console.timeEnd('route')
 
     }
+    main()
 
-    document.onload = main()
 
 </script>
 

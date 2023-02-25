@@ -2,7 +2,7 @@ const ronseCenter = [50.76, 3.57]
 // https://www.openstreetmap.org/export#map=14/50.7469/3.6186&layers=H
 const ronseArea = [[50.7552,3.6657],[50.7303,3.6038]] //[[50.7599, 3.6274], [50.7335, 3.5808]]
 const stepDestail = 0.0001//0.00001
-
+const timbuktu = [16.7719091, -3.0087272]
 
 const {log,info,warn}=console
 /** Map */
@@ -59,6 +59,10 @@ function sleep(s = 0.1) {
     return new Promise(resolve => setTimeout(resolve, s * 1000));
 }
 
+function toCoordId(x,y){
+    return JSON.stringify([x,y])
+}
+
 function toFixed(nr, amt = 6) {
     return +nr.toFixed(amt)
 }
@@ -66,10 +70,15 @@ function toFixed(nr, amt = 6) {
 function randint(a=0,b=1) {
     return a + Math.random() * b
 }
-// [[x,y],[x,y]]
+
+function getDistance(a, b) {
+    return Math.hypot(b.x - a.x, b.y - a.y)
+}
 function getDis(a, b) {
     return Math.hypot(b[0] - a[0], b[1] - a[1])
 }
+
+
 // js adatoption of python range
 function range(n = 1) {
     return [...new Array(n)]
@@ -87,7 +96,7 @@ function getPosTo(src, targ, dis) {
 function getIcon(coords){
     const LeafIcon = L.Icon.extend({
         options: {
-           iconSize: [40, 30],
+           iconSize: [50, 30],
         }
     });
     const icon = new LeafIcon({
@@ -96,9 +105,10 @@ function getIcon(coords){
     return new L.marker(coords,  {icon: icon}).addTo(MAP)
 }
 
+
 /** Data */
-const loadJsonData = (file='ronse-StreetParts-276.json', isFulpath=false)=> new Promise((resolve, reject) => {
-    fetch(isFulpath?file:'../data/'+file)
+const loadJsonData = (file)=> new Promise((resolve, reject) => {
+    fetch('../../data/ronse-StreetParts-276.json')
         .then(respond => {
             resolve(respond.json())
         }).catch(err => {
