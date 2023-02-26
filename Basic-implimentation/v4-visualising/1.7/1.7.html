@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script>
+        L_NO_TOUCH = true;
+        L_DISABLE_3D = true;
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+        #MAP {
+            height: 90vh !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js">
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" />
+
+    <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        #MAP {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        }
+
+        .leaflet-container {
+            font-size: 1rem;
+        }
+
+        #stats {
+            padding: 1rem;
+        }
+
+        #stats>* {
+            margin: 1rem 0;
+            outline: none
+        }
+        /** prompt_transfer */
+        #prompt_transfer{
+            position: absolute;
+            top: 20vh;
+            left: 30vw; 
+            z-index: 99999;
+            width: fit-content;
+            height: fit-content;
+            padding: 2rem;
+            background-color: rgb(141, 21, 21);
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        #prompt_transfer .user {
+            width: 40vw;
+            height: fit-content;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        #prompt_transfer .user .tite {
+            display: inline-block;
+            padding: 10px;
+
+        }
+
+        #prompt_transfer .selected {
+            background-color: rgba(54, 206, 54, 0.502);
+        }
+
+        .hide{
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <form id="prompt_transfer" class="">
+        Request street transfer:
+        <div id="prompt_title"></div>
+        <select name="user-select"></select>
+        <input type="hidden" name="part-id" value="">
+        <input type="hidden" name="source-user" value="">
+
+        <button type="submit">send request</button>
+        <button id="prompt_close" type="button">x</button>
+
+    </form>
+
+    <div class="folium-map" id="MAP"></div>
+    <script src="./helpers.js"></script>
+    <script src="./classes.js"></script>
+    <script src="./main.js"></script>
+</body>
+
+
+</html>
