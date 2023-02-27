@@ -35,7 +35,7 @@ class StreetPart {
         this.user = user
     }
     addMarker(){
-        this.marker = createMarker(String(this.partId), this.rawNodes, this.user.color, 5)
+        this.marker = createMarker(String(this.partId), this.rawNodes, this.user.color)
     }
     removeMarker(){
         MAP.removeLayer(this.marker)
@@ -100,30 +100,40 @@ class DriverClass {
     getPos() {
         return this.truck.getLatLng()
     }
-    recieveTransferedReqest(partId, streetName, partData){
+    responseMsg(msg,code=0){
+        return {code: code, message:msg}
+    }
+    recieveTransferRequest(partId, streetName, partData){
         log(3, partId, streetName, partData)
         // has that part
-        if(this.route.lookupPart.has(String(partId))) return log('Already has part') || false
+        if(this.route.lookupPart.has(String(partId))) {
+            return this.responseMsg('Already has part', 1)
+        }
         // has that street
         if(this.route.lookupStreet.has(streetName)) {
-            info('has street')
-            return true
+            return this.responseMsg('has street', 2)
         }
         // new street
         this.route.addStreet(streetName, [partData])
+        //this.route.lookupPart.get(String(partId))
+        const newPart=otherUser.route.lookupPart.get(partId)
+        newPart.addUser(this.user)
+        newPart.addMarker()
 
-        // recieve transfer request from user
-        const marker = createMarker(partId, partData.coords, this.user.color)
-        //Grid.init
+        //const marker = createMarker(partId, partData.coords, this.user.color)
+
         //GridCell.lookupPart(partId).marker = createMarker()
-        return true
+        return this.responseMsg('Succes', 0)
     }
     sendTransferRequest(id, targetUser){
         const part = this.route.lookupPart.get(String(id))
         if(!part) return log('User does own the part requested to send')
         const res = offlineServer.handleStreetTransfer(id, part.street.name, targetUser)
-        if(!res) return log('no confirmation recieved')
+        if(res.code >0) return log('Error tranfering:', res.message)
+        log('succes tranfering:', res.message)
+
         part.removeMarker()
+        return true
     }
 }
 
@@ -153,7 +163,9 @@ class RouteClass {
     initMarkers() {
         // adds streets routes
         this.lookupStreet.forEach(street => {
-            street.parts.forEach(p => p.addMarker())
+            street.parts.forEach(p => {
+                if(!p.marker) p.addMarker()
+            })
             street.displayStats()
         })
     }
@@ -162,8 +174,10 @@ class RouteClass {
     // note: all nodes are only created once and share the reference to their street
     addStreet(name, parts) {
         const statsElm = this.statistics.create()
-        const street = new Street(name, statsElm)
+        const street = this.lookupStreet.get(name) || new Street(name, statsElm)
 
+        // iterate all parts
+        // then add each part to a street
         for (let rawPart of parts) {
             const _part = this.subDevidePart(rawPart.coords)
 
@@ -179,7 +193,7 @@ class RouteClass {
             })
         }
 
-        this.lookupStreet.set(name, street)
+        if(!this.lookupStreet.has(name)) this.lookupStreet.set(name, street)
     }
     subDevidePart(coords){
         const response = []
@@ -239,7 +253,7 @@ class GridClass {
         return JSON.stringify(toFixed(x,5)+';'+toFixed(y,5))
     }
     init(nodes) {
-        // create temporary grid
+        // create temporary gridf
         const tempGrid = {}
         nodes.forEach(p => {
             const id = this.toCellCoord(p.x,p.y)
@@ -253,6 +267,7 @@ class GridClass {
     }
 
     checkPointsInRadius(position) {
+        if(!position||!position.lat)return info('no position', position)
         const id = this.toCellCoord(position.lat,position.lng)
 
         const cell = this.cells.get(id)
@@ -323,17 +338,8 @@ class ServerClass {
     // can be a whole street or part of a street
     handleStreetTransfer(id, streetName, targetUser=''){
         log(2, id)
-    
-        return otherUser.recieveTransferedReqest(id, streetName, this.rawParts.get(String(id)))
-        // add security (verification) here
-        const part = this.users[fromUser].activeRoute?.get(id)
-        // possible example securty steps
-        if(!part)return alert('You do not contain this part or do not have an active route: id:'+id)
-        if(!this.users[targetUser].activeRoute) alert('Other user: '+targetUser+', is currently notn on duty.')
 
-        this.users[targetUser].activeRoute.set(id, part)
-        this.users[fromUser].activeRoute.delete(id)
-        console.log('tranfer road complete', id, part)
+        return otherUser.recieveTransferRequest(id, streetName, this.rawParts.get(String(id)))
     }
 }
 
@@ -341,40 +347,70 @@ class ServerClass {
 // note: currently also handles requests
 class HtmlOutClass {
     constructor(){
-        // overlay element
-        this.promptParentElm = document.getElementById('prompt_transfer');
-        this.promptParentElm.addEventListener('submit', (e)=>{
-            e.preventDefault()
-            const data = new FormData(this.promptParentElm )
-            const targetUser = data.get('user-select')
-            const id = data.get('part-id')
-            if(!id)return info('no street selected')
-            log(1, id)
-            //Object.fromEntries([...a])
+        const container = document.getElementById('prompt_form_transfer');
 
-            currentUser.sendTransferRequest(id, targetUser)
+        this.form={
+            parent: container.parentElement,
+            container: container,
+
+            userFrom: container.querySelector("input[name='user-from']"),
+            userTo: container.querySelector("select[name='user-to']"),
+            wayStreet: container.querySelector("input[name='way-street']"),
+            wayId: container.querySelector("input[name='way-id']"),
+
+            error: container.querySelector(".alert.alert-danger"),
+            btnCancel: container.querySelector("button#transfer_close"),
+        }
+        // event
+        this.form.container.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            this.handleFormSubmit()
         })
+        
         // set input to current user
-        document.querySelector('#prompt_transfer input[name=source-user]').value = currentUser.user.name
+        this.form.userTo.value = currentUser.user.name
 
-        // controllable id input
-        this.promptInputId = document.querySelector('#prompt_transfer input[name=part-id]')
 
         // set close button event
-        document.getElementById('prompt_close').addEventListener('click', (event)=>{
-            this.promptParentElm.classList.add('hide')
+        this.form.btnCancel.addEventListener('click', (event)=>{
+            this.form.parent.classList.add('hide')
         })
-        this.userSelect = document.querySelector('#prompt_transfer select[name=user-select]')
     }
 
+
+    handleFormSubmit(event){
+        const data = new FormData(this.form.container )
+        const targetUser = data.get('user-to')
+        const id = data.get('way-id')
+        if(!id)return info('no street selected')
+        log(1, id)
+        //Object.fromEntries([...a])
+
+        currentUser.sendTransferRequest(id, targetUser)
+        this.form.parent.classList.add('hide')
+    }
+
+    // open user select form
     promptRequest(id){
-        this.promptInputId.value = id
-        this.promptParentElm.classList.remove('hide')
+        const data=currentUser.route.lookupPart.get(id)
+        if(!data) return warn('448: Current user does not contain street part: '+id)
+        for(let [name, info] of Object.entries(offlineServer.users).filter(i=>i[1].activeRoute)){
+            if(name === currentUser.user.name) continue
+            this.form.userTo.innerHTML += `<option>${name}</option>`
+        }
+        this.form.userFrom.value=currentUser.user.name
+        this.form.wayId.value = id
+        this.form.wayStreet.value = data.street.name
+
+        this.form.parent.classList.remove('hide')
     }
 
     createUserSelect(users){
+        return
         for(let [name, info] of Object.entries(users)){
-            this.userSelect.innerHTML += `<option>${name}</option>`
+            this.form.userSelect.innerHTML += `<option>${name}</option>`
         }
+        this.userTo.innerHTML+= `<option value="${value}">${text||value}</option>`
+
     }
 }

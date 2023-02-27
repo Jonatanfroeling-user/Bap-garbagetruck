@@ -52,6 +52,7 @@
         .leaflet-container {
             font-size: 1rem;
         }
+        /** stats*/
 
         #stats {
             padding: 1rem;
@@ -61,40 +62,45 @@
             margin: 1rem 0;
             outline: none
         }
-        /** prompt_transfer */
-        #prompt_transfer{
+        /** overlay */
+
+        .overlay_option {
             position: absolute;
-            top: 20vh;
-            left: 30vw; 
             z-index: 99999;
-            width: fit-content;
-            height: fit-content;
-            padding: 2rem;
-            background-color: rgb(141, 21, 21);
+            margin: auto;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            backdrop-filter: blur(2px) brightness(1.1);
             overflow-y: scroll;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-        #prompt_transfer .user {
-            width: 40vw;
-            height: fit-content;
             padding: 1rem;
-            margin: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        #prompt_transfer .user .tite {
-            display: inline-block;
-            padding: 10px;
-
+        .overlay_option #prompt_form_transfer{
+            min-width: 40vw;
+            min-height: 80vh;
+            padding: 2rem;
+            box-shadow: 0 0 7px 0px rgba(0, 0, 0, 0.135);
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
         }
 
-        #prompt_transfer .selected {
-            background-color: rgba(54, 206, 54, 0.502);
+        .overlay_option #prompt_form_transfer .controls{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .overlay_option #prompt_form_transfer .controls >*{
+            margin-right: 1rem;
         }
 
-        .hide{
+        /** other */
+
+        .hide {
             display: none;
         }
     </style>
@@ -102,18 +108,70 @@
 </head>
 
 <body>
+    <div class="overlay_option hide">
+        <form id="prompt_form_transfer">
+            <div class="info">
+                <h3>Street transfer panel</h3>
+                <div class="alert alert-danger hide">Error:</div>
+                <h4>Options:</h4>
+                <ul class="info list-group">
+                    <label for="user-from">from:</label>
+                    <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
+                    
+                    <label for="user-to">to:</label>
+                    <select name="user-to" class="list-group-item custom-select">
+                    </select>
+                    
+                    <label for="way-street">streetname:</label>
+                    <input name="way-street" type="disabled" class="list-group-item disabled"  value="-">
+                    
+                    <label for="way-id">id:</label>
+                    <input name="way-id" type="disabled" class="list-group-item disabled" value="-">
 
-    <form id="prompt_transfer" class="">
-        Request street transfer:
-        <div id="prompt_title"></div>
-        <select name="user-select"></select>
-        <input type="hidden" name="part-id" value="">
-        <input type="hidden" name="source-user" value="">
+                    <label for="way-select-all">Select whole street</label>
+                    <div class="list-group-item input-group-text">
+                        <input type="checkbox" name='way-select-all' aria-label="Selecting whole street">
+                      </div>
+                </ul>
+            </div>
+            <div class="controls">
+                <button id="transfer_close" type="button" class="btn btn-secondary">cancel</button>
+                <button type="submit" class="btn btn-primary">send request</button>
+            </div>    
+        </form>
+    </div>
 
-        <button type="submit">send request</button>
-        <button id="prompt_close" type="button">x</button>
+    <div class="overlay_option hide">
+        <form id="prompt_form_transfer">
+            <div class="info">
+                <h3>Street transfer recieve panel</h3>
+                <div class="alert alert-danger hide">Error:</div>
+                <h4>Info</h4>
+                <ul class="info list-group">
+                    <label for="user-from">from:</label>
+                    <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
+                    
+                    <label for="user-to">to:</label>
+                    <select name="user-to" class="list-group-item custom-select">
+                    </select>
+                    
+                    <label for="way-street">streetname:</label>
+                    <input name="way-street" type="disabled" class="list-group-item disabled"  value="-">
+                    
+                    <label for="way-id">id:</label>
+                    <input name="way-id" type="disabled" class="list-group-item disabled" value="-">
 
-    </form>
+                    <label for="way-id">Whole street</label>
+                    <input name="way-id" type="checkbox" class="list-group-item disabled" value="-">
+                </ul>
+            </div>
+            <div class="controls">
+                <button id="transfer_close" type="button" class="btn btn-secondary">cancel</button>
+                <button type="submit" class="btn btn-primary">Accept</button>
+            </div>    
+        </form>
+    </div>
+
 
     <div class="folium-map" id="MAP"></div>
     <script src="./helpers.js"></script>

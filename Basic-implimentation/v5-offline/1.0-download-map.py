@@ -38,7 +38,7 @@ def main():
 
 
     minzoom = 13 # ronse area
-    maxzoom = 17 # street name, small streets
+    maxzoom = 17 # zoom to: street name, small streets
     
     # download progress
     progressTotal=0
@@ -47,12 +47,12 @@ def main():
 
 
     # custom maade stuout progress bar
-    def printProgress(percent):
-        sys.stdout.write('\r{}%'.format(percent))
+    def printProgress(percent, message=''):
+        sys.stdout.write('\r{}%  {}'.format(percent, message))
         sys.stdout.flush()
         
 
-    # get total download length
+    # get total download length to see progresss
     for zoom in range(minzoom, int(maxzoom)+1, 1):
         xtile, ytile = deg2num(float(lat)-0.1, float(lon)-0.05, zoom)
         final_xtile, final_ytile = deg2num(float(lat)+0.1, float(lon)+0.05, zoom)
@@ -66,11 +66,12 @@ def main():
             xtile, ytile = deg2num(float(lat)-0.1, float(lon)-0.05, zoom)
             final_xtile, final_ytile = deg2num(float(lat)+0.1, float(lon)+0.05, zoom)
 
-            print("%d:%d-%d/%d-%d" % (zoom, xtile, final_xtile, ytile, final_ytile))
+            #print("%d:%d-%d/%d-%d" % (zoom, xtile, final_xtile, ytile, final_ytile))
             for x in range(xtile, final_xtile + 1, 1):
                 for y in range(ytile, final_ytile - 1, -1):
-                    printProgress(math.floor((progress+1)/progressTotal *100))
+                    printProgress(math.floor((progress+1)/progressTotal *100), "zoom:%d - at:%d-%d/%d-%d - x:%d, y:%d" % (zoom, xtile, final_xtile, ytile, final_ytile,x,y))
                     progress+=1
+                    #time.sleep(0.01)
                     download_url(zoom, x, y)
     
 main() 

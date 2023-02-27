@@ -1,17 +1,15 @@
 const Grid = new GridClass()
-
+const offlineServer = new ServerClass()
 // need to be gloabl scope as they require each other
 // normally tis would just be a request send to a server
-let dom, offlineServer;
+let dom, currentUser, otherUser;
 
-// active user
-let currentUser = null
-let otherUser = null
 
+const allcoords=[]
 
 
 async function main() {
-  offlineServer = new ServerClass()
+  console.time('route')
   await offlineServer.boot()
   // init routes for users
   // normally inited on each different device seperately
@@ -29,6 +27,10 @@ async function main() {
   // note: this shouold be done for each seprate device of course
   const allc = [...currentUser.route.lookupNodes.values(), ...otherUser.route.lookupNodes.values()].flat()
   Grid.init(allc)
+  console.timeEnd('route')
+
+
+  return
 
   let stop = 0
   while(!currentUser.done && !otherUser.done) {
