@@ -5,6 +5,7 @@
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script>
         L_NO_TOUCH = true;
         L_DISABLE_3D = true;
@@ -24,22 +25,17 @@
             height: 90vh !important;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js">
-    </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" />
 
-    <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../libs/css/index.css">
+
+
+    <script src="../libs/js/jquery.js"></script>
+    <script src="../libs/js/leaflet.js"></script>
+    <script src="../libs/js/awesome-marker.js"></script>
+    <script src="../libs/js/bootstrap.js"></script>
+    <script src="../libs/js/bootstrap-toggle.js"></script>
+
+
     <style>
         #MAP {
             position: relative;
@@ -111,9 +107,9 @@
     <div class="overlay_option hide">
         <form id="prompt_form_transfer">
             <div class="info">
-                <h3>Street transfer panel</h3>
+                <h3 class="title">Street transfer panel</h3>
                 <div class="alert alert-danger hide">Error:</div>
-                <h4>Options:</h4>
+                <h4 class="sub-title">Info:</h4>
                 <ul class="info list-group">
                     <label for="user-from">from:</label>
                     <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
@@ -130,7 +126,7 @@
 
                     <label for="way-select-all">Select whole street</label>
                     <div class="list-group-item input-group-text">
-                        <input type="checkbox" name='way-select-all' aria-label="Selecting whole street">
+                        <input type="checkbox" name='way-select-all' data-toggle="toggle">
                       </div>
                 </ul>
             </div>
@@ -144,7 +140,7 @@
     <div class="overlay_option">
         <form id="prompt_form_transfer_reciever">
             <div class="info">
-                <h3>Street transfer recieve panel</h3>
+                <h3>Street recieve panel</h3>
                 <div class="alert alert-danger hide">Error:</div>
                 <h4>Info</h4>
                 <ul class="info list-group">
@@ -158,7 +154,7 @@
                     <input name="way-id" type="disabled" class="list-group-item disabled" value="-">
 
                     <label for="way-id">Whole street</label>
-                    <input name="way-id" type="checkbox" class="list-group-item disabled" value="-">
+                    <input type="checkbox" disabled name='way-select-all' data-toggle="toggle" class="list-group-item">
                 </ul>
             </div>
             

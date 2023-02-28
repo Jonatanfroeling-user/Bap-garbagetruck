@@ -103,6 +103,11 @@ class DriverClass {
     responseMsg(msg,code=0){
         return {code: code, message:msg}
     }
+    recievePartConfirmation(id){
+        this.route.lookupPart.get(String(id)).removeMarker()
+        this.route.lookupPart.delete(String(id))
+
+    }
     recieveTransferRequest(partId, streetName, partData){
         log(3, partId, streetName, partData)
         // has that part
@@ -129,6 +134,7 @@ class DriverClass {
         const part = this.route.lookupPart.get(String(id))
         if(!part) return log('User does own the part requested to send')
         const res = offlineServer.handleStreetTransfer(id, part.street.name, targetUser)
+
         if(res.code >0) return log('Error tranfering:', res.message)
         log('succes tranfering:', res.message)
 
@@ -338,6 +344,7 @@ class ServerClass {
     // can be a whole street or part of a street
     handleStreetTransfer(id, streetName, targetUser=''){
         log(2, id)
+        dom.promptRecieveRequest(id, streetName, targetUser)
 
         return otherUser.recieveTransferRequest(id, streetName, this.rawParts.get(String(id)))
     }
@@ -348,81 +355,83 @@ class ServerClass {
 class HtmlOutClass {
     constructor(){
         const container = document.getElementById('prompt_form_transfer');
-        const containerRecieve = document.getElementById('prompt_form_transfer_reciever');
 
-        this.formSend={
+        this.formInfo={
             parent: container.parentElement,
             container: container,
+
+            title: container.querySelector(".title"),
 
             userFrom: container.querySelector("input[name='user-from']"),
             userTo: container.querySelector("select[name='user-to']"),
             wayStreet: container.querySelector("input[name='way-street']"),
             wayId: container.querySelector("input[name='way-id']"),
+            waySelectAll: container.querySelector("input[name='way-select-all']"),
+
 
             error: container.querySelector(".alert.alert-danger"),
             btnCancel: container.querySelector("button#transfer_close"),
         }
 
 
-        this.formSend={
-            parent: containerRecieve.parentElement,
-            container: containerRecieve,
-
-            userFrom: container.querySelector("input[name='user-from']"),
-            wayStreet: container.querySelector("input[name='way-street']"),
-            wayId: container.querySelector("input[name='way-id']"),
-
-            error: container.querySelector(".alert.alert-danger"),
-            btnCancel: container.querySelector("button#transfer_close"),
-        }
         // event
-        this.formSend.container.addEventListener('submit', (e)=>{
+        this.formInfo.container.addEventListener('submit', (e)=>{
             e.preventDefault();
             this.handleFormSubmit()
         })
         
         // set input to current user
-        this.formSend.userTo.value = currentUser.user.name
+        this.formInfo.userTo.value = currentUser.user.name
 
 
         // set close button event
-        this.formSend.btnCancel.addEventListener('click', (event)=>{
-            this.formSend.parent.classList.add('hide')
+        this.formInfo.btnCancel.addEventListener('click', (event)=>{
+            this.formInfo.parent.classList.add('hide')
         })
     }
 
 
     handleFormSubmit(event){
-        const data = new FormData(this.formSend.container )
+        const data = new FormData(this.formInfo.container )
         const targetUser = data.get('user-to')
         const id = data.get('way-id')
-        if(!id)return info('no street selected')
+        const allStreets = data.get('way-id')
+
+        //if(!id)return info('no street selected')
         log(1, id)
         //Object.fromEntries([...a])
+        const rawData = [...data].map(i=>{return{name:i.name, value:i.value}}).filter(i=>i.name)
+
 
         currentUser.sendTransferRequest(id, targetUser)
-        this.formSend.parent.classList.add('hide')
+        this.formInfo.parent.classList.add('hide')
     }
 
     // open user select form
-    promptRequest(id){
+    promptSendRequest(id){
         const data=currentUser.route.lookupPart.get(id)
         if(!data) return warn('448: Current user does not contain street part: '+id)
         for(let [name, info] of Object.entries(offlineServer.users).filter(i=>i[1].activeRoute)){
             if(name === currentUser.user.name) continue
-            this.formSend.userTo.innerHTML += `<option>${name}</option>`
+            this.formInfo.userTo.innerHTML += `<option>${name}</option>`
         }
-        this.formSend.userFrom.value=currentUser.user.name
-        this.formSend.wayId.value = id
-        this.formSend.wayStreet.value = data.street.name
+        this.formInfo.userFrom.value=currentUser.user.name
+        this.formInfo.wayId.value = id
+        this.formInfo.wayStreet.value = data.street.name
 
-        this.formSend.parent.classList.remove('hide')
+        this.formInfo.parent.classList.remove('hide')
     }
+
+    promptRecieveRequest(){
+
+    }
+
+
 
     createUserSelect(users){
         return
         for(let [name, info] of Object.entries(users)){
-            this.formSend.userSelect.innerHTML += `<option>${name}</option>`
+            this.formInfo.userSelect.innerHTML += `<option>${name}</option>`
         }
         this.userTo.innerHTML+= `<option value="${value}">${text||value}</option>`
 

@@ -40,11 +40,6 @@ const tileMap = L.tileLayer(
 ).addTo(MAP);
 
 function createMarker(id, coords, color = '#00ff00', width = 4) {
-    allcoords.push(coords)
-    // coords=coords.filter(i=>i.length)
-    // for(let i of coords){
-    //     if(!i[0]) exit()
-    // }
     const marker = L.polyline(
         coords, {
             "bubblingMouseEvents": true,
@@ -74,7 +69,7 @@ function createMarker(id, coords, color = '#00ff00', width = 4) {
     });
 
     marker.on('click', function (e) {
-        dom.promptRequest(id)
+        dom.promptSendRequest(id)
     });
     return marker
 }
