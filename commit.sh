@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "$2" -eq "init" ]]; then
+if [ "$1" == "init" ]; then
     git init
     git remote add origin https://github.com/Jonatanfroeling-user/Bap-garbagetruck.git   
 fi
