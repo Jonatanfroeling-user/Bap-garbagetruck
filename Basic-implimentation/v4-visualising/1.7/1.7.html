@@ -105,7 +105,7 @@
 
 <body>
     <div class="overlay_option hide">
-        <form id="prompt_form_transfer">
+        <form id="prompt_form_transfer_send">
             <div class="info">
                 <h3 class="title">Street transfer panel</h3>
                 <div class="alert alert-danger hide">Error:</div>
@@ -127,7 +127,12 @@
                     <label for="way-select-all">Select whole street</label>
                     <div class="list-group-item input-group-text">
                         <input type="checkbox" name='way-select-all' data-toggle="toggle">
-                      </div>
+                    </div>
+
+                    <label for="way-select-all">Message</label>
+                    <textarea name="message"  class="list-group-item disabled" value="-">
+                    </textarea>
+
                 </ul>
             </div>
             <div class="controls">
@@ -137,30 +142,18 @@
         </form>
     </div>
 
-    <div class="overlay_option">
-        <form id="prompt_form_transfer_reciever">
+    <div class="overlay_option hide">
+        <form id="prompt_form_transfer_recieve">
             <div class="info">
-                <h3>Street recieve panel</h3>
+                <h3 class="title">Street transfer panel</h3>
                 <div class="alert alert-danger hide">Error:</div>
-                <h4>Info</h4>
-                <ul class="info list-group">
-                    <label for="user-from">from:</label>
-                    <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
-                                        
-                    <label for="way-street">streetname:</label>
-                    <input name="way-street" type="disabled" class="list-group-item disabled"  value="-">
-                    
-                    <label for="way-id">id:</label>
-                    <input name="way-id" type="disabled" class="list-group-item disabled" value="-">
-
-                    <label for="way-id">Whole street</label>
-                    <input type="checkbox" disabled name='way-select-all' data-toggle="toggle" class="list-group-item">
-                </ul>
+                <h4 class="sub-title">Info:</h4>
+                <input type="hidden" name="way-id" value="">
+                <div id="content"></div>
             </div>
-            
             <div class="controls">
-                <button id="transfer_close" type="button" class="btn btn-secondary">Decline</button>
-                <button type="submit" class="btn btn-primary">Accept</button>
+                <button id="transfer_decline" type="button" class="btn btn-secondary">decline</button>
+                <button id="transfer_accept" type="button" class="btn btn-primary">Accept</button>
             </div>    
         </form>
     </div>
@@ -168,7 +161,11 @@
 
     <div class="folium-map" id="MAP"></div>
     <script src="./helpers.js"></script>
-    <script src="./classes.js"></script>
+    <script src="./classes-map.js"></script>
+    <script src="./classes-server.js"></script>
+    <script src="./classes-render.js"></script>
+    <script src="./classes-user.js"></script>
+
     <script src="./main.js"></script>
 </body>
 

@@ -5,5 +5,5 @@ if [[ "$2" -eq "init" ]]; then
 fi
 
 git add .
-git commit -m 'init'
+git commit -m 'update'
 git push origin main

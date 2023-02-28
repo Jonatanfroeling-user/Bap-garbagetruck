@@ -11,14 +11,13 @@ async function main() {
   await offlineServer.boot()
   // init routes for users
   // normally inited on each different device seperately
-  currentUser = offlineServer.assignRoute('louis', 'route1')
-  otherUser = offlineServer.assignRoute('ahmed', 'route2')
+  currentUser = offlineServer.assignRoute('louis', 'route-1')
+  otherUser = offlineServer.assignRoute('ahmed', 'route-2')
 
   currentUser.route.initMarkers()
   otherUser.route.initMarkers()
   
   dom = new HtmlOutClass()
-  dom.createUserSelect(offlineServer.users)
 
   // settup of grid, saves all points to values
   // in order for the grid to check them

@@ -12,6 +12,12 @@ const {
     info,
     warn
 } = console
+
+function dd(...a){
+    console.log('**-----------------------**')
+    console.log(...a)
+    console.log('--------------------------')
+}
 /** Map */
 const MAP = L.map(
     "MAP", {
@@ -60,15 +66,9 @@ function createMarker(id, coords, color = '#00ff00', width = 4) {
         }
     ).addTo(MAP);
 
-    marker.on('mouseover', function (e) {
-        e.target.bindPopup(id).openPopup();
-    });
-
-    marker.on('mouseout', function (e) {
-        e.target.closePopup();
-    });
 
     marker.on('click', function (e) {
+        info('1 - click', id)
         dom.promptSendRequest(id)
     });
     return marker
@@ -99,6 +99,8 @@ function getDistance(a, b) {
 function getDis(a, b) {
     return Math.hypot(b[0] - a[0], b[1] - a[1])
 }
+
+JSON.copy = (a)=> JSON.parse(JSON.stringify(a))
 
 Array.prototype.current = 0
 Array.prototype.next = function () {
