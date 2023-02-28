@@ -5,8 +5,6 @@ const offlineServer = new ServerClass()
 let dom, currentUser, otherUser;
 
 
-const allcoords=[]
-
 
 async function main() {
   console.time('route')

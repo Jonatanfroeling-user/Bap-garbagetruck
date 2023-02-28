@@ -79,7 +79,7 @@
             align-items: center;
         }
 
-        .overlay_option #prompt_form_transfer{
+        .overlay_option >*{
             min-width: 40vw;
             min-height: 80vh;
             padding: 2rem;
@@ -90,11 +90,11 @@
             flex-direction: column;
         }
 
-        .overlay_option #prompt_form_transfer .controls{
+        .overlay_option  .controls{
             display: flex;
             justify-content: flex-end;
         }
-        .overlay_option #prompt_form_transfer .controls >*{
+        .overlay_option .controls >*{
             margin-right: 1rem;
         }
 
@@ -141,8 +141,8 @@
         </form>
     </div>
 
-    <div class="overlay_option hide">
-        <form id="prompt_form_transfer">
+    <div class="overlay_option">
+        <form id="prompt_form_transfer_reciever">
             <div class="info">
                 <h3>Street transfer recieve panel</h3>
                 <div class="alert alert-danger hide">Error:</div>
@@ -150,11 +150,7 @@
                 <ul class="info list-group">
                     <label for="user-from">from:</label>
                     <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
-                    
-                    <label for="user-to">to:</label>
-                    <select name="user-to" class="list-group-item custom-select">
-                    </select>
-                    
+                                        
                     <label for="way-street">streetname:</label>
                     <input name="way-street" type="disabled" class="list-group-item disabled"  value="-">
                     
@@ -165,8 +161,9 @@
                     <input name="way-id" type="checkbox" class="list-group-item disabled" value="-">
                 </ul>
             </div>
+            
             <div class="controls">
-                <button id="transfer_close" type="button" class="btn btn-secondary">cancel</button>
+                <button id="transfer_close" type="button" class="btn btn-secondary">Decline</button>
                 <button type="submit" class="btn btn-primary">Accept</button>
             </div>    
         </form>

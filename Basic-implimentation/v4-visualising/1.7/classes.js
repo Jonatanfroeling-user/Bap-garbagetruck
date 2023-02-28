@@ -348,8 +348,9 @@ class ServerClass {
 class HtmlOutClass {
     constructor(){
         const container = document.getElementById('prompt_form_transfer');
+        const containerRecieve = document.getElementById('prompt_form_transfer_reciever');
 
-        this.form={
+        this.formSend={
             parent: container.parentElement,
             container: container,
 
@@ -361,25 +362,38 @@ class HtmlOutClass {
             error: container.querySelector(".alert.alert-danger"),
             btnCancel: container.querySelector("button#transfer_close"),
         }
+
+
+        this.formSend={
+            parent: containerRecieve.parentElement,
+            container: containerRecieve,
+
+            userFrom: container.querySelector("input[name='user-from']"),
+            wayStreet: container.querySelector("input[name='way-street']"),
+            wayId: container.querySelector("input[name='way-id']"),
+
+            error: container.querySelector(".alert.alert-danger"),
+            btnCancel: container.querySelector("button#transfer_close"),
+        }
         // event
-        this.form.container.addEventListener('submit', (e)=>{
+        this.formSend.container.addEventListener('submit', (e)=>{
             e.preventDefault();
             this.handleFormSubmit()
         })
         
         // set input to current user
-        this.form.userTo.value = currentUser.user.name
+        this.formSend.userTo.value = currentUser.user.name
 
 
         // set close button event
-        this.form.btnCancel.addEventListener('click', (event)=>{
-            this.form.parent.classList.add('hide')
+        this.formSend.btnCancel.addEventListener('click', (event)=>{
+            this.formSend.parent.classList.add('hide')
         })
     }
 
 
     handleFormSubmit(event){
-        const data = new FormData(this.form.container )
+        const data = new FormData(this.formSend.container )
         const targetUser = data.get('user-to')
         const id = data.get('way-id')
         if(!id)return info('no street selected')
@@ -387,7 +401,7 @@ class HtmlOutClass {
         //Object.fromEntries([...a])
 
         currentUser.sendTransferRequest(id, targetUser)
-        this.form.parent.classList.add('hide')
+        this.formSend.parent.classList.add('hide')
     }
 
     // open user select form
@@ -396,19 +410,19 @@ class HtmlOutClass {
         if(!data) return warn('448: Current user does not contain street part: '+id)
         for(let [name, info] of Object.entries(offlineServer.users).filter(i=>i[1].activeRoute)){
             if(name === currentUser.user.name) continue
-            this.form.userTo.innerHTML += `<option>${name}</option>`
+            this.formSend.userTo.innerHTML += `<option>${name}</option>`
         }
-        this.form.userFrom.value=currentUser.user.name
-        this.form.wayId.value = id
-        this.form.wayStreet.value = data.street.name
+        this.formSend.userFrom.value=currentUser.user.name
+        this.formSend.wayId.value = id
+        this.formSend.wayStreet.value = data.street.name
 
-        this.form.parent.classList.remove('hide')
+        this.formSend.parent.classList.remove('hide')
     }
 
     createUserSelect(users){
         return
         for(let [name, info] of Object.entries(users)){
-            this.form.userSelect.innerHTML += `<option>${name}</option>`
+            this.formSend.userSelect.innerHTML += `<option>${name}</option>`
         }
         this.userTo.innerHTML+= `<option value="${value}">${text||value}</option>`
 
