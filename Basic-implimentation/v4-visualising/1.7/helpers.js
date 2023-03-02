@@ -45,7 +45,7 @@ const tileMap = L.tileLayer(
     }
 ).addTo(MAP);
 
-function createMarker(id, coords, color = '#00ff00', width = 4) {
+function createMarker(id, coords, color = '#00ff00', width = 12) {
     const marker = L.polyline(
         coords, {
             "bubblingMouseEvents": true,
@@ -53,13 +53,12 @@ function createMarker(id, coords, color = '#00ff00', width = 4) {
             "dashArray": null,
             "dashOffset": null,
             "fill": false,
-            "fillColor": [color],
-            "fillOpacity": 0.2,
+            "fillOpacity": 0,
             "fillRule": "evenodd",
             "lineCap": "round",
             "lineJoin": "round",
             "noClip": false,
-            "opacity": 1,
+            "opacity": 0.3,
             "smoothFactor": 1.0,
             "stroke": true,
             "weight": width
@@ -68,7 +67,7 @@ function createMarker(id, coords, color = '#00ff00', width = 4) {
 
 
     marker.on('click', function (e) {
-        info('1 - click', id)
+        info('1 - click', id, e.target)
         dom.promptSendRequest(id)
     });
     return marker
