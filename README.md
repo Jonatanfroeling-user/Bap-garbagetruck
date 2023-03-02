@@ -10,3 +10,7 @@ Leters version much have differnt queries and are overal more modified.
 ## [Research-Files](./Research-Files/)
 This folder mainly is used as backup of sketches for writing the thesis.
 
+
+## tiles
+The tiles are zipped 
+
