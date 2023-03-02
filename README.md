@@ -12,5 +12,5 @@ This folder mainly is used as backup of sketches for writing the thesis.
 
 
 ## tiles
-The tiles are zipped 
+Tiles folder contains downloaded images from OSM data. They own all right to them.
 
