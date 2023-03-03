@@ -7,8 +7,10 @@
 import os, sys, time, math, urllib3, shutil
 http = urllib3.PoolManager()
 
-# http://c.tile.openstreetmap.org/%d/%d/%d.png
-BASE_URL = 'https://basemaps.cartocdn.com/light_all'
+## faster but no bulk donwload allowed
+BASE_URL= 'http://c.tile.openstreetmap.org'
+## slower but more easy access
+#BASE_URL = 'https://basemaps.cartocdn.com/light_all'
 
 
 def deg2num(lat_deg, lon_deg, zoom):
