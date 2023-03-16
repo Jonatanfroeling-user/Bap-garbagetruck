@@ -1,10 +1,11 @@
 import os
 import zipfile
 
-
 def zip_folder():
-    input_path='Basic-implimentation/v6-api/route-x'
-    output_path='Basic-implimentation/v6-api/route-x-zipped.zip'
+    BASE_PATH = 'Basic-implimentation/data/offlineRoutes'
+
+    input_path = BASE_PATH+'/route-x'
+    output_path = BASE_PATH+'/route-x-zipped.zip'
 
     """Zips a folder and its subfolders containing images."""
     with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
@@ -18,4 +19,4 @@ def zip_folder():
     print(f"Folder '{input_path}' zipped successfully!")
 
 
-# zip_folder()
+zip_folder()

@@ -31,7 +31,7 @@ const MAP = L.map(
 const tileMap = L.tileLayer(
     //"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     //"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-    "/tiles/{z}/{x}/{y}.png",
+    "../../tiles/{z}/{x}/{y}.png",
 
 
     {

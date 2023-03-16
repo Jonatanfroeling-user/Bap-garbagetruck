@@ -33,8 +33,8 @@
             const ctx = cnv.getContext("2d");
             ctx.font = "20px Helvetica"
 
-            // array to store the cities
-            let cities = [
+            // array to store the WAYPOINTS
+            let WAYPOINTS = [
                 {x: 100, y: 100},
                 {x: 200, y: 200},
                 {x: 300, y: 50},
@@ -47,18 +47,31 @@
                 {x: 100, y: 500},
                 {x: 200, y: 400},
                 {x: 200, y: 350},
-
-
-
             ];
 
-            cites = []
-            for(let i=0;i<20;i++){
-                cities.push({x: Math.random() * cnv.width, y: Math.random() * cnv.height})
-            }
+            WAYPOINTS = [
+                // four dots next to each other
+                {x: 100, y: 100},
+                {x: 200, y: 100},
+                {x: 300, y: 100},
+                {x: 400, y: 100},
+
+                {x: 150, y: 150},
+                {x: 300, y: 150},
+
+                {x: 150, y: 250},
+
+                {x: 450, y: 350},
+            ];
+
+
+            //cites = []
+            //for(let i=0;i<20;i++){
+            //    WAYPOINTS.push({x: Math.random() * cnv.width, y: Math.random() * cnv.height})
+            //}
             
 
-            // function to draw a line between two cities
+            // function to draw a line between two WAYPOINTS
             function drawLine(from, to, nr) {
                 ctx.beginPath();
                 ctx.moveTo(from.x, from.y);
@@ -70,24 +83,23 @@
             function drawTSPPath(path) {
                 for (let i = 0; i < path.length - 1; i++) {
                     ctx.strokeStyle = `hsl(${360/path.length*i}deg,50%,50%)`
-                    drawLine(cities[path[i]], cities[path[i + 1]]);
-                    ctx.fillText(String(i), cities[path[i]].x, cities[path[i]].y)
-
+                    drawLine(WAYPOINTS[path[i]], WAYPOINTS[path[i + 1]]);
+                    ctx.fillText(String(i), WAYPOINTS[path[i+1]].x, WAYPOINTS[path[i+1]].y)
                 }
             }
-
+            const totalDis = 0
             // function to find the TSP path using the nearest neighbor algorithm
             function findTSPPath() {
                 let path = [0];
                 let currentCity = 0;
-                let visited = new Array(cities.length).fill(false);
+                let visited = new Array(WAYPOINTS.length).fill(false);
                 visited[0] = true;
-                for (let i = 0; i < cities.length - 1; i++) {
+                for (let i = 0; i < WAYPOINTS.length - 1; i++) {
                     let nearestCity = -1;
                     let nearestDistance = Number.MAX_VALUE;
-                    for (let j = 0; j < cities.length; j++) {
+                    for (let j = 0; j < WAYPOINTS.length; j++) {
                         if (!visited[j]) {
-                            let distance = Math.sqrt(Math.pow(cities[currentCity].x - cities[j].x, 2) + Math.pow(cities[currentCity].y - cities[j].y, 2));
+                            let distance = Math.sqrt(Math.pow(WAYPOINTS[currentCity].x - WAYPOINTS[j].x, 2) + Math.pow(WAYPOINTS[currentCity].y - WAYPOINTS[j].y, 2));
                             if (distance < nearestDistance) {
                                 nearestCity = j;
                                 nearestDistance = distance;
@@ -104,8 +116,9 @@
             // main function to draw the TSP path on the canvas
             function draw() {
                 ctx.strokeStyle = '#aaa'
-                for(let a of cities){
-                    for(let b of cities){
+                for(let a of WAYPOINTS){
+                    for(let b of WAYPOINTS){
+                        break
                         drawLine(a, b, 1)
                     }
                 }

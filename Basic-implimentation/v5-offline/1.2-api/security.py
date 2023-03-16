@@ -54,7 +54,6 @@ def decrypt_zip(input_path, output_path, key):
             file.write(decrypted_data)
 
 """
-
 This code defines two functions encrypt_zip() and decrypt_zip() that take an input zip file path, an output zip file path, and a key. 
 The encrypt_zip() function encrypts the input zip file using the specified key and saves the encrypted data and initialization vector (IV) 
 to the output zip file. The decrypt_zip() function reads the encrypted data and IV from the input zip file, decrypts the data using 
