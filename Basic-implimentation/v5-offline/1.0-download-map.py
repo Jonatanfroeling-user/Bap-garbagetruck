@@ -1,6 +1,7 @@
 """
-@author tonyrewin 
-@src https://gist.github.com/tonyrewin/9444410
+@concept: tonyrewin https://gist.github.com/tonyrewin/9444410
+
+
 """
 #!/usr/bin/python3
 
