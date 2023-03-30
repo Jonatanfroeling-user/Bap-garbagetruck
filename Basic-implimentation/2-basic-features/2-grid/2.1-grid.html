@@ -70,7 +70,7 @@
 
     <div class="folium-map" id="MAP"></div>
 </body>
-<script src="../1.4+helpers.js"></script>
+<script src="./helpers.js"></script>
 
 
 
@@ -252,16 +252,16 @@
         }
         checkArea(coords){
             this.iterations+=this.detail
-            if(toFixed(this.iterations,6)%toFixed(this.searchArea,6) !== 0)return
-            this.marker.setLatLng(coords)
+            //if(toFixed(this.iterations,6)%toFixed(this.searchArea,6) !== 0)return
+            //this.marker.setLatLng(coords)
 
 
-            const [x,y]=coord
+            const [x,y]=coords
             let count=0
 
 
-            for(let _x of range(this.searchArea*2).map(i=>floor(x+i-this.searchArea))) {
-                for(let _y of range(this.searchArea*2).map(i=>floor(y+i-this.searchArea))) {
+            for(let _x of range(this.searchArea*2).map(i=>Math.floor(x+i-this.searchArea))) {
+                for(let _y of range(this.searchArea*2).map(i=>Math.floor(y+i-this.searchArea))) {
                     // is grid point
                     if( _x % this.detail===0 && _y % this.detail===0 )  {
                         // is within circular radius
@@ -272,7 +272,8 @@
                     }
                 }
             }
-            log(count)
+            //log(count)
+            //exit()
         }
         checkArea2(coords){
             this.iterations+=this.detail
@@ -302,6 +303,7 @@
                 }
             }
             log(stop)
+
         }
     }
 
@@ -391,22 +393,19 @@
     }
 
 
-
     const allDestinations = []
 
 
     /** MAIN **/
     async function main(){
-        console.time('timer-x')
-        const raw = await loadJsonData('../../data/ronse-StreetParts-276.json', true)
+        console.time('route')
+        allDestinations.length = 0
+        const raw = await loadJsonData('ronse-StreetParts-276.json')
         // iterates all streets
         for(let content of Object.values(raw)) {
             Overview.addStreet(content.name, content.parts)
         }
         Overview.initMap()
-        console.timeEnd('timer-x')
-        return
-
 
 
 
@@ -420,14 +419,15 @@
             trucky.setLatLng(des);
             Overview.grid.checkArea(Object.values(trucky.getLatLng()))
             //MAP.setView(trucky.getLatLng(), MAP.getZoom()); 
-            if(allDestinations.indexOf(des)%33==0) Overview.getGobalStats()
+            //if(allDestinations.indexOf(des)%33==0) Overview.getGobalStats()
 
         }
-        Overview.getGobalStats()
+        //Overview.getGobalStats()
+        console.timeEnd('route')
 
     }
+    main()
 
-    document.onload = main()
 
 </script>
 

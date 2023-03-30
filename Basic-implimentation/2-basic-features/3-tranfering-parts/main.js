@@ -26,8 +26,7 @@ async function main() {
   Grid.init(allc)
   console.timeEnd('route')
 
-
-  return
+  return console.info('!--not actively driving for testing for testing purpuses--!')
 
   let stop = 0
   while(!currentUser.done && !otherUser.done) {

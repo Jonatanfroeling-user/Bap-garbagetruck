@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+</head>
+
+<body>
+
+
+    <div class="folium-map" id="MAP"></div>
+</body>
+
+
+
+<script onload="">
+    /**
+        make one meter movement
+        = 0.00001 (5th)
+
+        eg:
+        y: 3.895143747329712
+        change-y: -21.165876388549805 (-100,100?)
+        =>
+     
+    a=-21.165876388549805 
+
+    b=a.toFixed(5).split('.')[1] //'16588'
+    c=+('0.'+b) //0.16588
+    c/100000
+    
+     * 
+     * */
+    const eg=[50.746728,3.606866]
+
+    const res = [
+        { lat: 3.895143747329712, lng: -20.851289749145508 },
+        { lat: 3.859062671661377, lng: -21.165876388549805 },
+        { lat: 3.945904016494751, lng: -21.243974685668945 },
+        { lat: 4.013745307922363, lng: -21.35184097290039 },
+        { lat: 3.75337815284729, lng: -21.40513801574707 },
+    ]
+    const routeStart=res[0]
+
+
+    const ronseCenter = [50.76, 3.57]
+
+    const digitsAfter0=2
+    const movementAccuracy=100 **digitsAfter0
+    
+    const res2=res.map(i=>({
+        lat:ronseCenter[0]+(routeStart.lat-i.lat)/movementAccuracy, 
+        lng:ronseCenter[1]+(routeStart.lng-i.lng)/movementAccuracy}
+    ))
+
+    console.log(res)
+    console.log(...res2)
+
+
+
+</script>
+
+
+
+</html>

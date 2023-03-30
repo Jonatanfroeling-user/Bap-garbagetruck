@@ -98,7 +98,7 @@ function getIcon(coords){
 
 /** Data */
 const loadJsonData = (file='ronse-StreetParts-276.json', isFulpath=false)=> new Promise((resolve, reject) => {
-    fetch(isFulpath?file:'../data/'+file)
+    fetch(isFulpath?file:'../../data/'+file)
         .then(respond => {
             resolve(respond.json())
         }).catch(err => {

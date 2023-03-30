@@ -25,7 +25,7 @@ async function main() {
 
   console.time('route')
   while(!driverX.done){
-    //await sleep(0.5)
+    await sleep(0.1)
     driverX.move()
     Grid.checkPointsInRadius(driverX.getPos())
     //if (driverX.destinations.length % 33 == 0) Route.getGobalStats()
