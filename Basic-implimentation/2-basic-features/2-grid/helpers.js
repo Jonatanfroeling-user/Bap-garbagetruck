@@ -59,6 +59,10 @@ function sleep(s = 0.1) {
     return new Promise(resolve => setTimeout(resolve, s * 1000));
 }
 
+function toCoordId(x,y){
+    return JSON.stringify([x,y])
+}
+
 function toFixed(nr, amt = 6) {
     return +nr.toFixed(amt)
 }

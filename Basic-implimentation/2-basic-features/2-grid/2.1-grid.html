@@ -173,6 +173,8 @@
             this.iterations = this.searchArea-this.detail
             this.linkedNodes= new Map()
 
+            this.gridCells=[]
+
             //L.rectangle(area, {color: 'orange',fillColor: '#f80',fillOpacity: 0.3}).addTo(MAP);
 
             const [[x1,y1],[x2,y2]]=this.area
@@ -216,6 +218,7 @@
                     const n = [toFixed(leftEdge,6),toFixed(topEdge,6)]
                     this.gridPoints[JSON.stringify(n)] = []
                     this.rawGridPoints.push(n)
+
                     //this.gridCells.push({x1:leftEdge,y1:topEdge,x2:leftEdge + this.detail,y2:topEdge + this.detail});
                     leftEdge += this.detail;
                 }
@@ -247,6 +250,10 @@
                 this.linkedGrid.set(JSON.stringify(res), id)
             }
             log('linked -done')
+            // display grid
+            // for(let p of this.gridCells){
+            //     L.rectangle([p], {color: 'orange',fillColor: '#f80',fillOpacity: 0.3}).addTo(MAP)
+            // }
 
 
         }
