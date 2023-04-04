@@ -5,5 +5,5 @@ if [ "$1" == "init" ]; then
 fi
 
 git add .
-git commit -m 'update'
+git commit -m "update_$(date '+%Y%m%d%H%M%S' )"
 git push origin main
