@@ -1,15 +1,14 @@
 from helpers import get_waypoints_raw, out
 from algorithms import two_opt
-import time
+import datetime
  
 
 '''
 Will give the fastest possible solution with relatevly high accuacy
 It does take nearly one hour to finish 100 waypoints. 
 '''
-# timer start
-start = time.time()
 
+print('Start 2-opt time:', datetime.datetime.now())
 waypoints_raw = get_waypoints_raw()
 
 res = two_opt(waypoints_raw)
@@ -19,6 +18,6 @@ print(res)
 out(res, '2-opt-res')
 
 
-end = time.time()
-print("\n\nTotal time: ", (end-start) * 10**3, "ms")
+
+print("\n\nFinished at: ", datetime.datetime.now())
 

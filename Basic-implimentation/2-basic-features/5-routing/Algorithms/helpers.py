@@ -1,4 +1,4 @@
-import json, os
+import json, os, sys
 from math import sqrt
 
 rawJsonFile = None
@@ -52,10 +52,16 @@ def get_waypoints_parts():
 
 
 
+def scaleNum(n, oldmin, oldmax, newmin, newmax):
+    return(((n - oldmin) * (newmax - newmin)) / (oldmax - oldmin)) + newmin
 
 
 
-
+# custom maade stuout progress bar
+def printProgress(c, m=100, msg=''):
+    done =  float("{:10.2f}".format(scaleNum(c, 0, m, 0, 50)))
+    sys.stdout.write('\r[{}{}]{}'.format('🥑' * int(done), '..' * int(50-done), str(done)+"/"+str(50)+"  "+msg  ))
+    sys.stdout.flush()
 
 def flatten(l):
     return [item for sublist in l for item in sublist]
@@ -76,4 +82,4 @@ def out(json_dict ,filename='data'):
         json.dump(json_dict, outfile, indent=4, sort_keys=False)
         
 
-print([i[::-1] for i in get_waypoints_raw()])
+# print([i[::-1] for i in get_waypoints_raw()][:4])

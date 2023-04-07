@@ -1,4 +1,4 @@
-from helpers import get_dis, get_path_length
+from helpers import get_dis, get_path_length, printProgress
 import random
 import numpy as np
 from itertools import permutations
@@ -75,9 +75,12 @@ def two_opt(coords):
     while improvement:
         improvement = False
         stop_infinite += 1
-        if stop_infinite > 100000:
+        if stop_infinite > 1000000:
             print('Possible infinte loop, quitting.')
             return best_route
+        elif stop_infinite%100==0:
+            print(stop_infinite)
+            
         for i in range(1, len(coords) - 2):
             for j in range(i + 1, len(coords)):
                 if j - i == 1:
@@ -106,29 +109,28 @@ def two_opt(coords):
 
 
 
+"""ACO
 
+Arguments:
+    The number of ants should generally be proportional to the number of waypoints. A common rule of thumb is to use between 5 and 10 ants per waypoint. So for 100 waypoints, a reasonable range might be 500 to 1000 ants.
+
+    The number of iterations should be high enough to allow the ants to explore the search space thoroughly, but not so high that the algorithm becomes too slow. A common value is between 100 and 1000 iterations.
+
+    The decay rate determines how quickly the pheromone evaporates over time. A high decay rate will cause the algorithm to converge faster, but may cause premature convergence to suboptimal solutions. A low decay rate will allow more exploration of the search space, but may require more iterations to converge. A common value is between 0.1 and 0.5.
+
+    The alpha and beta parameters control the relative importance of pheromone and distance in the ants' decision-making. A high alpha value will favor pheromone trails, while a high beta value will favor shorter distances. A common value is between 1 and 5 for each parameter.
+
+
+Returns:
+    list: iterated index of inputted waypoints
+"""
 # https://github.com/PelayoChoya/ACO_path_planning
-def aco(waypoints, n_ants=10, n_iterations=100, decay=0.5, alpha=1, beta=1):
-    pheromone = np.ones((len(waypoints), len(waypoints)))
-    pheromone *= 0.1 / np.mean(pheromone)
+import numpy as np
+import random
 
-    for i in range(n_iterations):
-        ants = [Ant(pheromone, alpha, beta) for _ in range(n_ants)]
-
-        for ant in ants:
-            ant.move(waypoints)
-
-        pheromone *= decay
-
-        for ant in ants:
-            path = ant.path
-            path_length = 0
-            for j in range(len(path)-1):
-                pheromone[path[j], path[j+1]] += 1 / path_length
-                pheromone[path[j+1], path[j]] += 1 / path_length
-
-    best_path = max(ants, key=lambda x: x.path_length).path
-    return best_path
+def get_path_length(start, end, waypoints):
+    """Compute the distance between two waypoints."""
+    return np.sqrt(np.sum((waypoints[start] - waypoints[end])**2)) + 1e-6
 
 class Ant:
     def __init__(self, pheromone, alpha, beta):
@@ -138,22 +140,57 @@ class Ant:
         self.path = []
         self.path_length = 0
 
-    def move(self, waypoints):
+    def move(self, waypoints, distances):
         current = random.randint(0, len(waypoints)-1)
         visited = [current]
 
         while len(visited) < len(waypoints):
             unvisited = [i for i in range(len(waypoints)) if i not in visited]
             probs = self.pheromone[current, unvisited] ** self.alpha * \
-                (1 / get_path_length(current, unvisited, waypoints)) ** self.beta
+                (1 / distances[current, unvisited]) ** self.beta
             probs = probs / np.sum(probs)
 
-            next_waypoint = random.choices(unvisited, probs)[0]
-            self.path_length += get_path_length(current, [next_waypoint], waypoints)
+            next_waypoint = np.random.choice(unvisited, p=probs)
+            self.path_length += distances[current, next_waypoint]
             visited.append(next_waypoint)
             self.path.append(next_waypoint)
             current = next_waypoint
 
-        self.path_length += get_path_length(current, [self.path[0]], waypoints)
+        self.path_length += distances[current, self.path[0]]
         self.path.append(self.path[0])
 
+
+
+def aco(waypoints, n_ants=10, n_iterations=100, decay=0.5, alpha=1, beta=1, progress=True):
+    # Convert waypoints to NumPy array for better performance
+    waypoints = np.array(waypoints)
+
+    # Precompute distances between waypoints to avoid repeated computations
+    distances = np.zeros((len(waypoints), len(waypoints)))
+    for i in range(len(waypoints)):
+        for j in range(i+1, len(waypoints)):
+            distances[i, j] = distances[j, i] = get_path_length(i, j, waypoints)
+
+    # Initialize pheromone matrix
+    pheromone = np.ones((len(waypoints), len(waypoints)))
+    pheromone *= 0.1 / np.mean(pheromone)
+
+    for i in range(n_iterations):
+        if progress:
+            printProgress(i, n_iterations)
+        ants = [Ant(pheromone, alpha, beta) for _ in range(n_ants)]
+
+        for ant in ants:
+            ant.move(waypoints, distances)
+
+        pheromone *= decay
+
+        for ant in ants:
+            path = ant.path
+            path_length = ant.path_length
+            for j in range(len(path)-1):
+                pheromone[path[j], path[j+1]] += 1 / path_length
+                pheromone[path[j+1], path[j]] += 1 / path_length
+
+    best_path = max(ants, key=lambda x: x.path_length).path
+    return best_path
