@@ -3,7 +3,7 @@ from math import sqrt
 
 rawJsonFile = None
 
-with open('Basic-implimentation/data/ronse-StreetParts-276.json') as f:
+with open('Basic-implimentation/data/ronse-streets-filtered.json') as f:
         rawJsonFile = json.load(f)
 
 # returns the raw coords of only first and last coorindate of every part, ie. waypoints
