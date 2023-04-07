@@ -145,7 +145,7 @@ function getIcon(coords) {
 
 /** Data */
 const loadJsonData = () => new Promise((resolve, reject) => {
-    fetch('../../data/ronse-StreetParts-276.json')
+    fetch('../../data/ronse-streets-filtered.json')
         .then(respond => {
             resolve(respond.json())
         }).catch(err => {
