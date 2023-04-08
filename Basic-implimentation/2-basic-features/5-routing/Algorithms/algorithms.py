@@ -22,7 +22,8 @@ def tsp(waypoints, debug=True):
     for perm in perms:
         dev+=1
         if debug and dev % len(waypoints):
-            print(str(dev)+'/'+str(len(waypoints)**len(waypoints)) + ' permutations')
+            printProgress(dev, len(waypoints)**len(waypoints), 'permutations')
+
         length = get_path_length(perm, waypoints)
         if shortest is None or length < get_path_length(shortest, waypoints):
             shortest = perm
@@ -44,6 +45,7 @@ def dfs(path, waypoints, visited, current):
                 return res
             path.pop()
             visited.remove(i)
+    print('none found..')
     return None
  
  
@@ -112,13 +114,18 @@ def two_opt(coords):
 """ACO
 
 Arguments:
-    The number of ants should generally be proportional to the number of waypoints. A common rule of thumb is to use between 5 and 10 ants per waypoint. So for 100 waypoints, a reasonable range might be 500 to 1000 ants.
+    The number of ants should generally be proportional to the number of waypoints. A common rule of thumb is to use between 5 and 10 ants per waypoint. 
+    For 100 waypoints, a reasonable range might be 500 to 1000 ants.
 
-    The number of iterations should be high enough to allow the ants to explore the search space thoroughly, but not so high that the algorithm becomes too slow. A common value is between 100 and 1000 iterations.
+    The number of iterations should be high enough to allow the ants to explore the search space thoroughly, but not so high that the algorithm becomes too slow. 
+    A common value is between 100 and 1000 iterations.
 
-    The decay rate determines how quickly the pheromone evaporates over time. A high decay rate will cause the algorithm to converge faster, but may cause premature convergence to suboptimal solutions. A low decay rate will allow more exploration of the search space, but may require more iterations to converge. A common value is between 0.1 and 0.5.
+    The decay rate determines how quickly the pheromone evaporates over time. A high decay rate will cause the algorithm to converge faster, 
+    but may cause premature convergence to suboptimal solutions. 
+    A low decay rate will allow more exploration of the search space, but may require more iterations to converge. A common value is between 0.1 and 0.5.
 
-    The alpha and beta parameters control the relative importance of pheromone and distance in the ants' decision-making. A high alpha value will favor pheromone trails, while a high beta value will favor shorter distances. A common value is between 1 and 5 for each parameter.
+    The alpha and beta parameters control the relative importance of pheromone and distance in the ants' decision-making. 
+    A high alpha value will favor pheromone trails, while a high beta value will favor shorter distances. A common value is between 1 and 5 for each parameter.
 
 
 Returns:
@@ -129,7 +136,7 @@ import numpy as np
 import random
 
 def get_path_length(start, end, waypoints):
-    """Compute the distance between two waypoints."""
+    # adds small number in case of 0
     return np.sqrt(np.sum((waypoints[start] - waypoints[end])**2)) + 1e-6
 
 class Ant:
@@ -162,16 +169,16 @@ class Ant:
 
 
 def aco(waypoints, n_ants=10, n_iterations=100, decay=0.5, alpha=1, beta=1, progress=True):
-    # Convert waypoints to NumPy array for better performance
+    #  waypoints to np array for better performance
     waypoints = np.array(waypoints)
 
-    # Precompute distances between waypoints to avoid repeated computations
+    # precompute distances between waypoints to avoid repeated computations
     distances = np.zeros((len(waypoints), len(waypoints)))
     for i in range(len(waypoints)):
         for j in range(i+1, len(waypoints)):
             distances[i, j] = distances[j, i] = get_path_length(i, j, waypoints)
 
-    # Initialize pheromone matrix
+    # init pheromone
     pheromone = np.ones((len(waypoints), len(waypoints)))
     pheromone *= 0.1 / np.mean(pheromone)
 
