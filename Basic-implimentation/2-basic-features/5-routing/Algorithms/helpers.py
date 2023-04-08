@@ -29,13 +29,14 @@ def get_waypoints_reversed():
     return res
 
 # waypoints by only giving the frist coordiantes of the waypoint (limiting waypions from 800 to 100)
-def get_waypoints_raw():
+def get_waypoints_raw(fulldata=False):
     raw = rawJsonFile
     res=[]
     for street in raw.values():
         for part in street['parts']:
-            res.append(part['coords'][0])
-    return res
+            d = part['coords'] if fulldata else part['coords'][0]
+            res.append(d)
+    return flatten(res) if fulldata else res
 
 # returns the parts only, {id: coords, ...}
 def get_waypoints_parts():
@@ -101,7 +102,8 @@ def ids_to_route_and_geojson(ids):
 
 
 
-
+def toFixed(n):
+    return "{:10.3f}".format(n)
 
 
 def scaleNum(n, oldmin, oldmax, newmin, newmax):
@@ -110,8 +112,8 @@ def scaleNum(n, oldmin, oldmax, newmin, newmax):
 
 # custom maade stuout progress bar
 def printProgress(c, m=100, msg=''):
-    done =  float("{:10.2f}".format(scaleNum(c, 0, m, 0, 50)))
-    sys.stdout.write('\r[{}{}]{}'.format('🥑' * int(done), '..' * int(50-done), str(done)+"/"+str(50)+"  "+msg  ))
+    done =  float(toFixed(scaleNum(c, 0, m, 0, 50)))
+    sys.stdout.write('\r[{}{}]{}'.format('🥑' * int(done), '..' * int(50-done), str(c)+"/"+str(m)+"  "+msg  ))
     sys.stdout.flush()
 
 def flatten(l):

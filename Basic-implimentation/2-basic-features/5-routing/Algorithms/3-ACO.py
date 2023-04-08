@@ -11,9 +11,9 @@ n_ants=800, n_iterations=500, decay=0.7, alpha=2, beta=2
 """
 
 
-waypoints = np.array([tuple(i) for i in get_waypoints_raw()])
+waypoints = np.array([tuple(i) for i in get_waypoints_raw(True)])
 
-res = aco(waypoints, n_ants=800, n_iterations=500, decay=0.6, alpha=2, beta=2)
+res = aco(waypoints, n_ants=len(waypoints)*7, n_iterations=400, decay=0.6, alpha=2, beta=2)
 
 
 print('\n\n************* -------- MAIN ----- *****************')

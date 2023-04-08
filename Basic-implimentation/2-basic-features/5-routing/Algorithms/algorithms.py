@@ -1,5 +1,5 @@
-from helpers import get_dis, get_path_length, printProgress
-import random
+from helpers import get_dis, get_path_length, printProgress, toFixed
+import random, datetime, time
 import numpy as np
 from itertools import permutations
 
@@ -12,10 +12,13 @@ All basic implimentations of the algorithms we culd use for this project
 ## traveling postman problem algorithm (find shortest path that visits every waypoint exactly once)
 # takes too long for testing as: 10 waypoints are already 3628800 calculations
 def tsp(waypoints, debug=True):
+    if len(waypoints)>20:
+        print("this will take years..")
+        exit()
     # gen all possible permutations (of waypoints)
     perms = permutations(range(len(waypoints)))
-    # print(list(perms))
-    # return 
+
+
     # calculate length of each permutation & return the shortest
     shortest = None
     dev=0
@@ -169,6 +172,10 @@ class Ant:
 
 
 def aco(waypoints, n_ants=10, n_iterations=100, decay=0.5, alpha=1, beta=1, progress=True):
+    startTime= datetime.datetime.now()
+    if progress:
+        print('started:', startTime)
+        print('config:', 'n_ants:'+str(n_ants), 'n_iterations:'+str(n_iterations), 'decay:'+str(decay), 'alpha:'+str(alpha), 'beta:'+str(beta), 'progress:'+str(progress))
     #  waypoints to np array for better performance
     waypoints = np.array(waypoints)
 
@@ -182,22 +189,33 @@ def aco(waypoints, n_ants=10, n_iterations=100, decay=0.5, alpha=1, beta=1, prog
     pheromone = np.ones((len(waypoints), len(waypoints)))
     pheromone *= 0.1 / np.mean(pheromone)
 
+    itertimer = time.time()
     for i in range(n_iterations):
+        # dev, print progress
         if progress:
-            printProgress(i, n_iterations)
+            printProgress(i, n_iterations, 'sec:'+str(toFixed(itertimer - time.time())))
+            itertimer = time.time()
+            
+            
         ants = [Ant(pheromone, alpha, beta) for _ in range(n_ants)]
 
         for ant in ants:
+            #printProgress(ants.index(ant), n_ants, 'ant-move')
             ant.move(waypoints, distances)
 
         pheromone *= decay
 
         for ant in ants:
+            #printProgress(ants.index(ant), n_ants, 'ant-calc')
             path = ant.path
             path_length = ant.path_length
             for j in range(len(path)-1):
                 pheromone[path[j], path[j+1]] += 1 / path_length
                 pheromone[path[j+1], path[j]] += 1 / path_length
+        
+
 
     best_path = max(ants, key=lambda x: x.path_length).path
+    if progress:
+        print('done at:', datetime.datetime.now())
     return best_path
