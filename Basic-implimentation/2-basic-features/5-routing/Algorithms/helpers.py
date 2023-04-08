@@ -52,9 +52,60 @@ def get_waypoints_parts():
 
 
 
+# turns ids [2,3,11..] back into a route {"mame":{...}}
+# overcomplicated but it works...
+def ids_to_route_and_geojson(ids):
+    ''' 2. restructure '''
+    waypoints_raw = get_waypoints_raw()
+    # get the original coordinates back
+    restructured = [waypoints_raw[i] for i in ids]
+    # NOTE: for testing in eg. geojson.iom you need to reverse the choords
+    # purpose so we dont end up at the horn of africa (not a joke)
+    #restructured = [i[::-1] for i in restructured]
+    print('\n*---------- restructured ----------*')
+    print(restructured)
+
+    ''' 3. retrieve original ids of parts of streets now in correct order '''
+    # reverse the process to gain the ID's of each part
+    waypoints_reversed = get_waypoints_reversed()
+    part_ids = [waypoints_reversed[str(i)] for i in restructured]
+    print('\n*---------- part ids ----------*')
+    print(part_ids)
+
+    ''' 4. restructure original json, using the ids create a new street data json file, this time in correct order '''
+    # reverse the process to gain the ID's of each part
+    final = []
+    geojson_test = []
+
+    parts = get_waypoints_parts()
+
+    for id in part_ids:
+        final.append(parts[id])
+        geojson_test.append([i[::-1] for i in parts[id]['coords']])
+
+    # flatten geojson
+    geojson_test = flatten(geojson_test)
+            
+    print('\n*---------- FINAL ----------*')
+    print(final)
+            
+    print('\n*---------- geojson ----------*')
+    print(geojson_test)
+    return [final, geojson_test]
+
+
+
+
+
+
+
+
+
+
+
+
 def scaleNum(n, oldmin, oldmax, newmin, newmax):
     return(((n - oldmin) * (newmax - newmin)) / (oldmax - oldmin)) + newmin
-
 
 
 # custom maade stuout progress bar
@@ -81,5 +132,10 @@ def out(json_dict ,filename='data'):
     with open("Basic-implimentation/2-basic-features/5-routing/Algorithms/"+filename+".json", "w") as outfile:
         json.dump(json_dict, outfile, indent=4, sort_keys=False)
         
+
+
+
+
+
 
 # print([i[::-1] for i in get_waypoints_raw()][:4])

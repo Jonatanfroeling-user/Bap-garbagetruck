@@ -1,4 +1,4 @@
-from helpers import get_waypoints_raw, out
+from helpers import get_waypoints_raw, out, ids_to_route_and_geojson
 from algorithms import two_opt
 import datetime
  
@@ -15,6 +15,7 @@ res = two_opt(waypoints_raw)
 
 print('*---------- 2-opt ----------*')
 print(res)
+reformed, geojson = ids_to_route_and_geojson(res)
 out(res, '2-opt-res')
 
 
