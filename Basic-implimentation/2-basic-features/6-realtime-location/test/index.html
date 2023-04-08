@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script>
+        L_NO_TOUCH = true;
+        L_DISABLE_3D = true;
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+        #MAP {
+            height: 90vh !important;
+        }
+    </style>
+
+    <link rel="stylesheet" href="../../../libs/css/index.css">
+
+
+    <script src="../../../libs/js/jquery.js"></script>
+    <script src="../../../libs/js/leaflet.js"></script>
+    <script src="../../../libs/js/awesome-marker.js"></script>
+    <script src="../../../libs/js/bootstrap.js"></script>
+    <script src="../../../libs/js/bootstrap-toggle.js"></script>
+
+
+    <style>
+        #MAP {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        }
+
+        .leaflet-container {
+            font-size: 1rem;
+        }
+        /** stats*/
+
+        #stats {
+            padding: 1rem;
+        }
+
+        #stats>* {
+            margin: 1rem 0;
+            outline: none
+        }
+        /** overlay */
+
+        .overlay_option {
+            position: absolute;
+            z-index: 99999;
+            margin: auto;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            backdrop-filter: blur(2px) brightness(0.8);
+            overflow-y: scroll;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay_option >*{
+            min-width: 40vw;
+            min-height: 80vh;
+            width: 40vw;
+            padding: 2rem;
+            box-shadow: 0 0 7px 0px rgba(0, 0, 0, 0.135);
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .overlay_option  .controls{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .overlay_option .controls >*{
+            margin-right: 1rem;
+        }
+
+        .overlay_option .content{
+            overflow-wrap: break-word;
+        }
+
+        /** other */
+
+        .hide {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="overlay_option hide">
+        <form id="prompt_form_transfer_send">
+            <div class="info">
+                <h3 class="title">Street transfer panel</h3>
+                <div class="alert alert-danger hide">Error:</div>
+                <h4 class="sub-title">Info:</h4>
+                <ul class="info list-group">
+                    <label for="user-from">from:</label>
+                    <input name="user-from" type="disabled" class="list-group-item disabled" value="this user">
+                    
+                    <label for="user-to">to:</label>
+                    <select name="user-to" class="list-group-item custom-select">
+                    </select>
+                    
+                    <label for="way-street">streetname:</label>
+                    <input name="way-street" type="disabled" class="list-group-item disabled"  value="-">
+                    
+                    <label for="way-id">id:</label>
+                    <input name="way-id" type="disabled" class="list-group-item disabled" value="-">
+
+                    <label for="way-select-all">Select whole street</label>
+                    <div class="list-group-item input-group-text">
+                        <input type="checkbox" name='way-select-all' data-toggle="toggle">
+                    </div>
+
+                    <label for="way-select-all">Message</label>
+                    <textarea name="message"  class="list-group-item disabled" value="-">
+                    </textarea>
+
+                </ul>
+            </div>
+            <div class="controls">
+                <button id="transfer_close" type="button" class="btn btn-secondary">cancel</button>
+                <button type="submit" class="btn btn-primary">send request</button>
+            </div>    
+        </form>
+    </div>
+
+    <div class="overlay_option hide">
+        <form id="prompt_form_transfer_recieve">
+            <div class="info">
+                <h3 class="title">Street recieve panel</h3>
+                <div class="alert alert-danger hide">Error:</div>
+                <h4 class="sub-title">Info:</h4>
+                <input type="hidden" name="way-id" value="">
+                <div id="content"></div>
+            </div>
+            <div class="controls">
+                <button id="transfer_decline" type="button" class="btn btn-secondary">decline</button>
+                <button id="transfer_accept" type="button" class="btn btn-primary">Accept</button>
+            </div>    
+        </form>
+    </div>
+
+
+    <div class="folium-map" id="MAP"></div>
+    <script src="./helpers.js"></script>
+    <script src="./classes-map.js"></script>
+    <script src="./classes-server.js"></script>
+    <script src="./classes-render.js"></script>
+    <script src="./classes-user.js"></script>
+
+    <script src="./main.js"></script>
+</body>
+
+
+</html>

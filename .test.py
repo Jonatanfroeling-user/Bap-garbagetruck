@@ -1,8 +1,11 @@
-import time
+a = [
+ [50.74513659156573, 3.6180380264292715],
+                    [50.7457809, 3.6175878],
+                    [50.74584553991852, 3.617581193876969],
+                    [50.7458945149785, 3.617640622586477],
+                    [50.74608129609419, 3.61840090014771],
+                    [50.74616526903975, 3.6186530933271497]
+                ]
 
 
-start_time_Guru99 = time.time()
-
-time.sleep(1)
-end_time_Guru99 = time.time()
-print("Time elapsed in this example code: ", end_time_Guru99 - start_time_Guru99)
+print([i[::-1] for i in a])
