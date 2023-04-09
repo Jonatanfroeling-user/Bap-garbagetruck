@@ -71,18 +71,6 @@ class Street {
 
     getRaw(){
         return this.rawParts
-        const parts = []
-        this.parts.forEach(p=>{
-            parts.push({
-                id:p.partId,
-                name: this.name,
-                coords:p.rawNodes
-            })
-        })
-        return {
-            name: this.name,
-            parts: parts,
-        }
     }
 }
 
