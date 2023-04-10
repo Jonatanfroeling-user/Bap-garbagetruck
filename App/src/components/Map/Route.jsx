@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import { useMap } from "react-leaflet";
-import routeData from '../../../data/route.json'
+import routeData from '../../data/route.json'
 
 
 L.Marker.prototype.options.icon = L.icon({

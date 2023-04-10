@@ -1,11 +1,16 @@
-import MapComponent from "./components/LeafletMap/index";
+import ImageDownloader from "./components/Buttons/DownloadOfflineMap";
+import MapComponent from "./components/Map/index";
 
 
 const App = () => {
 
 
   return (
+    <>
+    <ImageDownloader />
     <MapComponent/>
+
+    </>
 
   );
 };

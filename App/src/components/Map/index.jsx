@@ -7,6 +7,7 @@ import { useState } from "react";
 //        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 
 function toggleOfflineMap(url){
+  return
   if(url=="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png") return"../../data/tiles/{z}/{x}/{y}.png"
   else return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 }
