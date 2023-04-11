@@ -12,32 +12,32 @@ L.Marker.prototype.options.icon = L.icon({
 
 
 
-function createMarker(id, coords, color = '#00ff00', width = 12) {
-  const marker = L.polyline(
-      coords, {
-          "bubblingMouseEvents": true,
-          "color": [color],
-          "dashArray": null,
-          "dashOffset": null,
-          "fill": false,
-          "fillOpacity": 0,
-          "fillRule": "evenodd",
-          "lineCap": "round",
-          "lineJoin": "round",
-          "noClip": false,
-          "opacity": 0.3,
-          "smoothFactor": 1.0,
-          "stroke": true,
-          "weight": width
-      }
-  ).addTo(MAP);
+// function createMarker(id, coords, color = '#00ff00', width = 12) {
+//   const marker = L.polyline(
+//       coords, {
+//           "bubblingMouseEvents": true,
+//           "color": [color],
+//           "dashArray": null,
+//           "dashOffset": null,
+//           "fill": false,
+//           "fillOpacity": 0,
+//           "fillRule": "evenodd",
+//           "lineCap": "round",
+//           "lineJoin": "round",
+//           "noClip": false,
+//           "opacity": 0.3,
+//           "smoothFactor": 1.0,
+//           "stroke": true,
+//           "weight": width
+//       }
+//   ).addTo(MAP);
 
 
-  marker.on('click', function (e) {
-      console.info('1 - click', id, e.target)
-  });
-  return marker
-}
+//   marker.on('click', function (e) {
+//       console.info('1 - click', id, e.target)
+//   });
+//   return marker
+// }
 
 export default function Routing() {
   const map = useMap();
