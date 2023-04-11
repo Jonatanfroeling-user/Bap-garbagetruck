@@ -1,0 +1,48 @@
+$primary: rgb(0, 179, 255);
+$danger: rgb(225, 64, 32);
+$darkGray: rgb(31, 31, 31);
+
+// libs
+@import '/node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import 'react-toastify/dist/ReactToastify.css';
+
+
+
+.gradient {
+    &-blue {
+        background: linear-gradient(180deg, rgba(0,179,255,1) 0%, rgb(0, 137, 195) 100%);
+    }
+}
+
+.leaflet-container {
+    width: 100vh; 
+    height: 80vh;
+    z-index: 200;
+}
+
+.circle {
+    border-radius:100%;
+    aspect-ratio : 1 / 1;
+    &-icon {
+        backdrop-filter: blur(1px);
+        //border: none;
+        box-shadow: 0 0 3px gray;
+        overflow: hidden;
+        &-dark {
+            background: $darkGray;
+        }
+        &-light {
+            background: white;
+        }
+
+        svg {
+            scale: 1.6;
+            color: $primary;
+        }
+        &-alert {
+            color: $danger;
+        }
+    }
+    //background: linear-gradient(180deg, rgba(0,179,255,1) 0%, rgb(0, 137, 195) 100%);
+
+}
