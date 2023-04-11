@@ -41,7 +41,7 @@ L.Marker.prototype.options.icon = L.icon({
 
 export default function Routing() {
   const map = useMap();
-  const waypoints = useMemo(()=>routeData.map(i=>L.latLng(i[0], i[1])), [])
+  const waypoints = useMemo(()=>routeData.slice(0,130).map(i=>L.latLng(i[0], i[1])), [])
 
   useEffect(() => {
     if (!map) return;
