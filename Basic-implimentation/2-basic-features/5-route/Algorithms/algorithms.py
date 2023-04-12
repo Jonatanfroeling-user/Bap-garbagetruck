@@ -11,6 +11,7 @@ All basic implimentations of the algorithms we culd use for this project
 
 ## traveling postman problem algorithm (find shortest path that visits every waypoint exactly once)
 # takes too long for testing as: 10 waypoints are already 3628800 calculations
+# source: https://www.geeksforgeeks.org/traveling-salesman-problem-tsp-implementation/?ref=gcse
 def tsp(waypoints, debug=True):
     if len(waypoints)>20:
         print("this will take years..")
@@ -35,6 +36,7 @@ def tsp(waypoints, debug=True):
 
 
 ## depth-first which adds backtracking to TSP path to account for dead ends
+# source: https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 def dfs(path, waypoints, visited, current):
     # in case we visited every waypoint, DONE :)
     if len(visited) == len(waypoints):
@@ -68,6 +70,10 @@ def nearest_neighbor(waypoints):
 
 
 
+
+
+# Code based on the 2-opt algorithm to solve the Traveling Salesman Problem in Python
+# Source: https://stackoverflow.com/questions/53275314/2-opt-algorithm-to-solve-the-travelling-salesman-problem-in-python
 # https://en.wikipedia.org/wiki/2-opt
 # uses slicing to reverse the order of a subsequence of the route
 def two_opt(coords):
@@ -134,7 +140,8 @@ Arguments:
 Returns:
     list: iterated index of inputted waypoints
 """
-# https://github.com/PelayoChoya/ACO_path_planning
+# source: https://github.com/PelayoChoya/ACO_path_planning
+# source 2: https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms#Example_pseudo-code_and_formula
 import numpy as np
 import random
 
