@@ -24,7 +24,11 @@ with open('Basic-implimentation/data/ronse-allStreets-146.json') as jsonf:
                 'parts':[packet]
             }
     print(res)
-    
+
+
+"""
+Original code and query
+"""
 # if __name__:
 #     DATA = None
 #     print("Gathering street nodes:")

@@ -1,4 +1,4 @@
-const ronseCenter = [50.746, 3.63]
+const ronseCenter = [50.745, 3.62]
 // https://www.openstreetmap.org/export#map=14/50.7469/3.6186&layers=H
 const ronseArea = [
     [50.7552, 3.6657],
@@ -47,7 +47,7 @@ const tileMap = L.tileLayer(
     }
 ).addTo(MAP);
 
-function createMarker(id, coords, color = '#00ff00', width = 2) {
+function createMarker(id, coords, color = '#00ff00', width = 8) {
     const marker = L.polyline(
         coords, {
             "bubblingMouseEvents": true,
@@ -60,7 +60,7 @@ function createMarker(id, coords, color = '#00ff00', width = 2) {
             "lineCap": "round",
             "lineJoin": "round",
             "noClip": false,
-            "opacity": 1.3,
+            "opacity": 0.5,
             "smoothFactor": 1.0,
             "stroke": true,
             "weight": width

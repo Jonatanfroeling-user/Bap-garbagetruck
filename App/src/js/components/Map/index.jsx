@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import ResetMapButton from "./Buttons/ResetMap";
 import MapOptions from "./Buttons/MapButtons";
-import Routing from "./Routing";
+import Route from "./Route";
 
 //        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 
@@ -34,9 +34,8 @@ export default function Map() {
 
             url={mapUrl} //"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* <Route /> */}
+        <Route />
         <MapOptions/>
-        <Routing />
     </MapContainer>
   );
 }

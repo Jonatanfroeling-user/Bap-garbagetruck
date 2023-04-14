@@ -7,6 +7,7 @@ let otherUser = {}
 
 
 async function main() {
+  return 
   await offlineServer.boot()
   // init routes for users
   // normally inited on each different device seperately

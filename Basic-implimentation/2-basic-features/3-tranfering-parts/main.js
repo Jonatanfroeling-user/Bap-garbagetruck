@@ -5,7 +5,9 @@ const offlineServer = new ServerClass()
 let dom, currentUser, otherUser;
 
 
-
+/**
+ * 2 truck, 2 routes
+ */
 async function main() {
   console.time('route')
   await offlineServer.boot()
@@ -26,7 +28,7 @@ async function main() {
   Grid.init(allc)
   console.timeEnd('route')
 
-  return console.info('!--not actively driving for testing for testing purpuses--!')
+  // return console.info('!--not actively driving for testing for testing purpuses--!')
 
   let stop = 0
   while(!currentUser.done && !otherUser.done) {
