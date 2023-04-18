@@ -1,0 +1,58 @@
+{
+    "nodes": [{
+        "id": "00000000",
+        "description": "forgotten metaphysics question error by he forgotten subside fragmentary with require until"
+    }, {
+        "id": "00000001",
+        "description": "upon on most until uses universal point the require reimplanting into approval"
+    }, {
+        "id": "00000002",
+        "description": "it least inquiry any phenomena long yet require cussion subside notjust long"
+    }, {
+        "id": "00000003",
+        "description": "not retouchings contributions through ontological clueat already aristotle be achieved many demonstrated"
+    }, {
+        "id": "00000004",
+        "description": "obscure sanctions through nor progressive initial adequately with since adequately adequately beginning"
+    }, {
+        "id": "00000005",
+        "description": "contributions researches as effort dogma any though developed upon concept indefinable beginning"
+    }, {
+        "id": "00000006",
+        "description": "from intellectual means answered therefore y progressive even are give on today"
+    }, {
+        "id": "00000007",
+        "description": "hence aristotle obscure is wrested fostering  universal nor forgotten anyone long"
+    }, {
+        "id": "00000008",
+        "description": "cussion since most fostering of this already said this three in declares"
+    }],
+    "links": [{
+        "source": "00000005",
+        "target": "00000007"
+    }, {
+        "source": "00000007",
+        "target": "00000005"
+    }, {
+        "source": "00000002",
+        "target": "00000006"
+    }, {
+        "source": "00000007",
+        "target": "00000004"
+    }, {
+        "source": "00000001",
+        "target": "00000002"
+    }, {
+        "source": "00000000",
+        "target": "00000003"
+    }, {
+        "source": "00000003",
+        "target": "00000008"
+    }, {
+        "source": "00000005",
+        "target": "00000002"
+    }, {
+        "source": "00000003",
+        "target": "00000005"
+    }]
+}

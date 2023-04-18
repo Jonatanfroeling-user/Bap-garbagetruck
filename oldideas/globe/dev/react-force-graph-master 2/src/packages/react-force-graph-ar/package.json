@@ -1,0 +1,52 @@
+{
+  "name": "react-force-graph-ar",
+  "version": "1.5.8",
+  "description": "React component for AR force directed graphs",
+  "license": "MIT",
+  "unpkg": "dist/react-force-graph-ar.min.js",
+  "main": "dist/react-force-graph-ar.common.js",
+  "module": "dist/react-force-graph-ar.module.js",
+  "types": "dist/react-force-graph-ar.d.ts",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasturiano/react-force-graph.git"
+  },
+  "homepage": "https://github.com/vasturiano/react-force-graph",
+  "keywords": [
+    "react",
+    "force",
+    "graph",
+    "ar",
+    "a-frame",
+    "ar.js",
+    "webgl"
+  ],
+  "author": {
+    "name": "Vasco Asturiano",
+    "url": "http://bl.ocks.org/vasturiano"
+  },
+  "bugs": {
+    "url": "https://github.com/vasturiano/react-force-graph/issues"
+  },
+  "scripts": {
+    "build": "rimraf dist && rollup -c",
+    "dev": "rollup -w -c rollup.config.dev.js",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "dependencies": {
+    "3d-force-graph-ar": "^1.7",
+    "prop-types": "^15.8",
+    "react-kapsule": "^2.2"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "rollup": "^2.78.0"
+  }
+}

@@ -1,0 +1,622 @@
+
+[{
+  "type": "directory",
+  "name": "_animation",
+  "contents": [{
+      "type": "directory",
+      "name": "_js_canvas",
+      "contents": [{
+          "type": "directory",
+          "name": "2D"
+        },
+        {
+          "type": "directory",
+          "name": "3D"
+        },
+        {
+          "type": "directory",
+          "name": "Math"
+        },
+        {
+          "type": "file",
+          "name": "README.md"
+        },
+        {
+          "type": "directory",
+          "name": "assets"
+        },
+        {
+          "type": "directory",
+          "name": "audio-visualizer"
+        },
+        {
+          "type": "file",
+          "name": "class_animations.js"
+        },
+        {
+          "type": "file",
+          "name": "favicon.ico"
+        },
+        {
+          "type": "directory",
+          "name": "fractals"
+        },
+        {
+          "type": "directory",
+          "name": "games&simulations"
+        },
+        {
+          "type": "directory",
+          "name": "image_manipulation"
+        },
+        {
+          "type": "directory",
+          "name": "libs"
+        },
+        {
+          "type": "file",
+          "name": "main.css"
+        },
+        {
+          "type": "directory",
+          "name": "maze"
+        },
+        {
+          "type": "directory",
+          "name": "p5"
+        },
+        {
+          "type": "directory",
+          "name": "perlin-noise"
+        },
+        {
+          "type": "file",
+          "name": "setup.js"
+        },
+        {
+          "type": "directory",
+          "name": "ztest"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "threeJs",
+      "contents": [{
+          "type": "directory",
+          "name": "humanSociety"
+        },
+        {
+          "type": "directory",
+          "name": "js"
+        }
+      ]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "_python_projects",
+  "contents": [{
+      "type": "directory",
+      "name": "_stuff",
+      "contents": [{
+          "type": "file",
+          "name": "PrintLoader.py"
+        },
+        {
+          "type": "file",
+          "name": "reverseshuffle.py"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "apps",
+      "contents": [{
+          "type": "directory",
+          "name": "aoe-fake-virus"
+        },
+        {
+          "type": "directory",
+          "name": "coldTukeyKiller"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "cryptography-hashing",
+      "contents": [{
+          "type": "directory",
+          "name": "HAS_256"
+        },
+        {
+          "type": "file",
+          "name": "Hash ideas.docx"
+        },
+        {
+          "type": "directory",
+          "name": "sphicsx+"
+        },
+        {
+          "type": "directory",
+          "name": "testfile_own"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "cryptography-random",
+      "contents": [{
+          "type": "file",
+          "name": "MAIN.py"
+        },
+        {
+          "type": "directory",
+          "name": "__pycache__"
+        },
+        {
+          "type": "file",
+          "name": "table-1.npy"
+        },
+        {
+          "type": "file",
+          "name": "testCollision.py"
+        },
+        {
+          "type": "file",
+          "name": "testPlotting.py"
+        },
+        {
+          "type": "file",
+          "name": "testSearchPattern.py"
+        },
+        {
+          "type": "file",
+          "name": "testTableAppearance.py"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "fileSync",
+      "contents": [{
+          "type": "directory",
+          "name": "-backup"
+        },
+        {
+          "type": "file",
+          "name": "main.py"
+        },
+        {
+          "type": "directory",
+          "name": "src"
+        },
+        {
+          "type": "directory",
+          "name": "targ"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "image-GAN-neural",
+      "contents": [{
+          "type": "file",
+          "name": "1. StyleGAN_Encoder_Notebook.ipynb"
+        },
+        {
+          "type": "file",
+          "name": "2. Face_Editing_Notebook.ipynb"
+        },
+        {
+          "type": "directory",
+          "name": "raw_images"
+        },
+        {
+          "type": "directory",
+          "name": "stylegan-encoder"
+        },
+        {
+          "type": "file",
+          "name": "tqdm-4.46.1-py2.py3-none-any.whl"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "image-encrypt",
+      "contents": [{
+          "type": "file",
+          "name": "main.py"
+        },
+        {
+          "type": "directory",
+          "name": "outputs"
+        },
+        {
+          "type": "directory",
+          "name": "sources"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "image-merging",
+      "contents": [{
+          "type": "directory",
+          "name": "__pycache__"
+        },
+        {
+          "type": "file",
+          "name": "functions.py"
+        },
+        {
+          "type": "directory",
+          "name": "images"
+        },
+        {
+          "type": "directory",
+          "name": "magenta_arbitrary-image-stylization-v1-256_2"
+        },
+        {
+          "type": "file",
+          "name": "main.py"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "image-steganography",
+      "contents": [{
+          "type": "file",
+          "name": "README.md"
+        },
+        {
+          "type": "directory",
+          "name": "__pycache__"
+        },
+        {
+          "type": "file",
+          "name": "functions.py"
+        },
+        {
+          "type": "file",
+          "name": "img_enc.png"
+        },
+        {
+          "type": "file",
+          "name": "img_src.png"
+        },
+        {
+          "type": "file",
+          "name": "main.py"
+        },
+        {
+          "type": "directory",
+          "name": "stuff"
+        },
+        {
+          "type": "directory",
+          "name": "version1"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "math_?",
+      "contents": [{
+        "type": "file",
+        "name": "indea?.py"
+      }]
+    },
+    {
+      "type": "directory",
+      "name": "speechRecognition",
+      "contents": [{
+          "type": "file",
+          "name": "audio_files_harvard.wav"
+        },
+        {
+          "type": "file",
+          "name": "client.py"
+        }
+      ]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "apps",
+  "contents": [{
+      "type": "directory",
+      "name": "app_bookWriter",
+      "contents": [{
+          "type": "directory",
+          "name": "v1"
+        },
+        {
+          "type": "directory",
+          "name": "writer"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "app_finaces",
+      "contents": [{
+          "type": "file",
+          "name": "README"
+        },
+        {
+          "type": "file",
+          "name": "_example.csv"
+        },
+        {
+          "type": "file",
+          "name": "init.sh"
+        },
+        {
+          "type": "directory",
+          "name": "log"
+        },
+        {
+          "type": "directory",
+          "name": "src"
+        }
+      ]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "audio_programming",
+  "contents": [{
+      "type": "file",
+      "name": "README.md"
+    },
+    {
+      "type": "directory",
+      "name": "art to sound",
+      "contents": [{
+          "type": "directory",
+          "name": "__pycache__"
+        },
+        {
+          "type": "file",
+          "name": "_toAudio.py"
+        },
+        {
+          "type": "file",
+          "name": "_toMidi.py"
+        },
+        {
+          "type": "file",
+          "name": "aduio 1.py"
+        },
+        {
+          "type": "file",
+          "name": "audio 2.py"
+        },
+        {
+          "type": "file",
+          "name": "data_chaos.py"
+        },
+        {
+          "type": "file",
+          "name": "data_structured.py"
+        },
+        {
+          "type": "directory",
+          "name": "generation of data"
+        },
+        {
+          "type": "file",
+          "name": "helpers.py"
+        },
+        {
+          "type": "file",
+          "name": "research.txt"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "conway to midi",
+      "contents": [{
+          "type": "directory",
+          "name": "__pycache__"
+        },
+        {
+          "type": "file",
+          "name": "_main.py"
+        },
+        {
+          "type": "file",
+          "name": "life.py"
+        },
+        {
+          "type": "directory",
+          "name": "time_is_position"
+        },
+        {
+          "type": "file",
+          "name": "toImage.py"
+        },
+        {
+          "type": "file",
+          "name": "toMidi.py"
+        }
+      ]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "bash",
+  "contents": [{
+      "type": "file",
+      "name": "file.txt"
+    },
+    {
+      "type": "directory",
+      "name": "hacked-audio",
+      "contents": [{
+          "type": "file",
+          "name": "auf.mp3"
+        },
+        {
+          "type": "file",
+          "name": "main.sh"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "index.html"
+    },
+    {
+      "type": "file",
+      "name": "main copy.py"
+    },
+    {
+      "type": "file",
+      "name": "main.js"
+    },
+    {
+      "type": "file",
+      "name": "main.py"
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "deep_learning",
+  "contents": [{
+      "type": "directory",
+      "name": "test",
+      "contents": [{
+          "type": "directory",
+          "name": "v1"
+        },
+        {
+          "type": "directory",
+          "name": "v2"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "tut01-py",
+      "contents": [{
+        "type": "file",
+        "name": "Untitled.ipynb"
+      }]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "games",
+  "contents": [{
+      "type": "directory",
+      "name": "gameOfLife",
+      "contents": [{
+          "type": "directory",
+          "name": "a"
+        },
+        {
+          "type": "directory",
+          "name": "app"
+        },
+        {
+          "type": "directory",
+          "name": "app 2"
+        },
+        {
+          "type": "directory",
+          "name": "app 3"
+        },
+        {
+          "type": "file",
+          "name": "life.py"
+        },
+        {
+          "type": "file",
+          "name": "plot_life.py"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "mazeSolving",
+      "contents": [{
+          "type": "file",
+          "name": "draft.js"
+        },
+        {
+          "type": "file",
+          "name": "helpers.js"
+        },
+        {
+          "type": "file",
+          "name": "maze.html"
+        },
+        {
+          "type": "file",
+          "name": "maze.js"
+        },
+        {
+          "type": "directory",
+          "name": "original"
+        },
+        {
+          "type": "file",
+          "name": "setup.js"
+        }
+      ]
+    },
+    {
+      "type": "directory",
+      "name": "word-completion",
+      "contents": [{
+          "type": "file",
+          "name": "data.json"
+        },
+        {
+          "type": "file",
+          "name": "fileReader.py"
+        },
+        {
+          "type": "file",
+          "name": "index.html"
+        },
+        {
+          "type": "file",
+          "name": "main.js"
+        },
+        {
+          "type": "directory",
+          "name": "more sources"
+        },
+        {
+          "type": "directory",
+          "name": "sources"
+        }
+      ]
+    }
+  ]
+},
+{
+  "type": "directory",
+  "name": "security",
+  "contents": [{
+    "type": "directory",
+    "name": "learn",
+    "contents": [{
+      "type": "directory",
+      "name": "PyCk-master"
+    }]
+  }]
+}
+]

@@ -1,0 +1,30 @@
+APPS
+## 1. garbage truck app
+hoe moet dechaufeur rijden. 
+-> klant uploaden of er geen vuilbar is of wel (bij afgelegen gebieden kan de véél tijd besparen)
+
+
+
+## 2. who/what/who martial arts
+wat moet je doen als je met martial arts wil beginnen en waar zijn er clubs for wat
+
+
+- 2.2 bjj doll 3d
+weergave van bjj moves vanuit posities en mogelijke combinaties
+• er zijn 10000+ bewegingen = …combinaties
+
+
+## 3. globe notes/filesystem
+sphere with notes in 3d.
+
+
+## 4. Neuron Game (see notes)
+
+
+## 5. Logic pro x - mobile miniplay version of local filesystem
+
+
+
+
+
+

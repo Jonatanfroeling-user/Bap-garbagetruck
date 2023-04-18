@@ -1,0 +1,30 @@
+<head>
+  <style> body { margin: 0; } </style>
+
+  <!-- <script src="../../src/libs/"></script> -->
+  <script src="//unpkg.com/babel-standalone"></script>
+  <script src="//unpkg.com/react/umd/react.production.min.js"></script>
+  <script src="//unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+
+  <script src="//unpkg.com/react-force-graph-3d"></script>
+  <!-- <script src="../../src/libs/react-force-graph-3d"  type="text/javascript"></script> -->
+
+ <!-- <script src="../../src/packages/react-force-graph-3d/index.js"></script> -->
+
+  <script src="../datasets/random-data.js"></script>
+</head>
+
+<body>
+  <div id="graph"></div>
+
+  <script type="text/jsx">
+    
+    ReactDOM.render(
+      <ForceGraph3D 
+        graphData={genRandomTree()}
+        cooldownTicks={0}
+      />,
+      document.getElementById('graph')
+    );
+  </script>
+</body>
