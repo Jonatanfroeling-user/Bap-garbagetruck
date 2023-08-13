@@ -70,6 +70,7 @@ class Street {
 
   displayStats() {
     this.progress = this.nodes.filter((i) => i.checked).length;
+
     this.element.innerHTML = ` ${
       this.progress >= this.max * 0.95 ? "DONE -----" : ""
     } ${Math.round((this.progress / this.max) * 100)}% ${this.progress}/${
@@ -138,6 +139,7 @@ class RouteClass {
       this.lookupStreet.get(name) ||
       new Street(name, parts, this.statistics.create());
 
+    const allNodes = [];
     // iterate all parts
     // then add each part to a street
     for (let rawPart of parts) {
@@ -149,9 +151,8 @@ class RouteClass {
           new StreetNode(JSON.stringify(i), rawPart.id, i, street),
         ]),
       ]);
-      //   if (user.name !== "louis") {
-      //     user.destinations = [...user.destinations, ...nodes];
-      //   }
+
+      allNodes.push(...subdevided);
 
       const part = street.addPart(nodes, rawPart.id);
 
@@ -172,6 +173,7 @@ class RouteClass {
     if (initMarker) {
       this.initMarkers();
     }
+    return allNodes;
   }
 
   // removes street from memory
@@ -179,21 +181,31 @@ class RouteClass {
     const street = this.lookupStreet.get(name);
     if (!street)
       return log("cannot remove street as route deos not contain it: " + name);
+
+    const allCoords = [];
     street.parts.forEach((part) => {
-      this.removePart(part.partId);
+      allCoords.push(...this.removePart(part.partId));
     });
     this.lookupStreet.delete(name);
+    return allCoords;
   }
 
   // removes part from memory
   removePart(id) {
     const part = this.lookupPart.get(id);
-    if (!part) return log("Cant delete part that is not here");
+    if (!part) {
+      log("Cant delete part that is not here");
+      return [];
+    }
+    const coords = [];
     part.nodes.forEach((node) => {
       this.lookupNodes.delete(node.id);
+      coords.push(node.coords);
     });
     part.removeMarker();
     this.lookupPart.delete(part.partId);
+
+    return coords;
   }
 
   subDevidePart(coords) {
@@ -215,8 +227,11 @@ class RouteClass {
   // logs current state of route
   getGobalStats() {
     const r = [...this.lookupNodes.values()].flat();
-    const val = r.filter((i) => i.checked).length / r.length;
-    console.info("Current percentage of route:", val.toFixed(2));
+    this.done = toFixed(r.filter((i) => i.checked).length / r.length, 2);
+
+    this.statistics.setGlobalStats(this.done);
+    return this.done;
+    // console.info("Current percentage of route:", val.toFixed(2));
   }
 }
 
@@ -252,7 +267,7 @@ class GridClass {
   }
 
   checkPointsInRadius(position) {
-    if (!position || !position.lat) return; //  info("no position", position);
+    if (!position || !position.lat) return; // // info("no position", position);
     const id = this.toCellCoord(position.lat, position.lng);
 
     const cell = this.cells.get(id);

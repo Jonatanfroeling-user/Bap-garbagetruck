@@ -18,29 +18,23 @@ class DriverClass {
     this.pendingActions = new Map();
   }
   async init(useDataSet = false) {
-    const d = () =>
-      new Promise((resolve, reject) => {
-        fetch("../../../data/RealTimeLocation/intermediated.json")
-          .then((respond) => {
-            resolve(respond.json());
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    this.destinations = await d();
+    this.destinations = await loadJsonData(
+      "../data/RealTimeLocation/intermediated.json"
+    );
   }
   // move will be real life location tracking so this system will be compleatly different
   move() {
-    if (!this.destinations.length) return;
-    if (this.done) return; //  info("done.. :)");
+    if (this.done || !this.destinations.length) return;
     this.position = this.destinations.next();
-    if (!this.position) {
+
+    if (
+      !this.position ||
+      this.position.current === this.destinations.length - 1
+    ) {
+      this.destinations.length = 0;
       this.done = true;
       return;
     }
-    if (this.position.current === this.destinations.length - 1)
-      this.done = true;
 
     this.truck.setLatLng(this.position);
   }
@@ -54,12 +48,12 @@ class DriverClass {
 
     // select whole street or not
     if (request.street) {
-      action = () => {
+      action = () =>
         this.route.addStreet(request.name, request.data, this.user, true);
-      };
+
       // only select part
     } else {
-      action = () => {
+      action = () =>
         // dd(request);
         this.route.addStreet(
           request.data.name,
@@ -67,10 +61,10 @@ class DriverClass {
           this.user,
           true
         );
-      };
     }
     this.pendingActions.set(request.id, action);
-    //  info("5 - user2 - recieve req", request);
+
+    // // info("5 - user2 - recieve req", request);
     dom.promptRecieveRequest(request);
   }
 
@@ -83,10 +77,8 @@ class DriverClass {
     const requestBody = {
       from: form.get("user-to"),
       to: form.get("user-from"),
-
       id: form.get("way-id"),
       name: form.get("way-street"),
-
       street: !!form.get("way-select-all"),
       routeId: this.route.id,
     };
@@ -97,19 +89,54 @@ class DriverClass {
       if (!this.route.lookupStreet.has(requestBody.name))
         return log("Cannot request transfering an unknown street");
       action = () => {
-        this.route.removeStreet(requestBody.name);
+        const current = this.destinations.current;
+        const coordsToDelete = this.route.removeStreet(requestBody.name);
+        const strCoords = coordsToDelete.map((i) => String(i));
+
+        this.destinations = this.destinations.filter(
+          (coord) => !strCoords.includes(String(coord))
+        );
+
+        this.destinations.current = current;
       };
       // only select part
     } else {
-      if (!this.route.lookupPart.has(String(requestBody.id)))
+      if (!this.route.lookupPart.has(String(requestBody.id))) {
         return log("Cannot request transfering an unknown part");
+      }
+
       action = () => {
-        this.route.removePart(requestBody.id);
+        const current = this.destinations.current;
+        const coordsToDelete = this.route.removeStreet(requestBody.name);
+        const strCoords = coordsToDelete.map((i) => String(i));
+
+        this.destinations = this.destinations.filter(
+          (coord) => !strCoords.includes(String(coord))
+        );
+
+        this.destinations.current = current;
+
+        // const coordsToDelete = this.route.removePart(requestBody.id);
+
+        // const first = this.destinations.findIndex(
+        //   (coord) => coord === coordsToDelete[0]
+        // );
+
+        // this.destinations.splice(first, coordsToDelete.length - 1);
+
+        // const last =  this.destinations.findIndex(coord => coord === coordsToDelete[coordsToDelete.length -1])
+        // const strCoords = coordsToDelete.map((i) => String(i));
+        // for(let i=0;i<this.destinations.length;i++) {
+        //   if(strCoords.includes(String(this.destinations[i]))) {
+        //     // remove item, with modifying the array only once
+        //   }
+        // }
+        // this.destinations = this.destinations.filter(
+        //   (coord) => !strCoords.includes(String(coord))
+        // );
       };
     }
-    //  info("3 - user1 - send req", requestBody);
     this.pendingActions.set(requestBody.id, action);
-
     offlineServer.handleTransferRequest(requestBody);
   }
 
@@ -120,9 +147,11 @@ class DriverClass {
       message: "",
       id: id,
     };
-    if (accepted) this.pendingActions.get(id)();
+    if (accepted) {
+      this.done = false;
+      this.destinations.push(...this.pendingActions.get(id)());
+    }
     this.pendingActions.delete(id);
-    //  info("7 - user2 - send resp", response);
     offlineServer.handleTransferResponse(response);
   }
 
@@ -131,10 +160,8 @@ class DriverClass {
     const { id, code } = response;
     if (code) {
       this.pendingActions.get(id)();
-      log("Request accepted!");
     } else log("Request declined!");
 
-    //  info("9 - user1 - ... ", response);
     // clear peding actions cache
     this.pendingActions.delete(id);
   }

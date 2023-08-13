@@ -71,13 +71,13 @@ class ServerClass {
     }
     const response = { ...request, data: JSON.copy(data) };
 
-    //  info("6 - server - send req", response);
+    // // info("6 - server - send req", response);
 
     otherUser.recieveTransferRequest(response);
   }
 
   handleTransferResponse(response) {
-    //  info("9 - server - resp", response);
+    // // info("9 - server - resp", response);
     currentUser.recieveTransferResponse(response);
   }
 }

@@ -14,8 +14,6 @@ async function main() {
 
   currentUser.route.initMarkers();
 
-  // console.log(currentUser.destinations);
-
   dom = new HtmlOutClass();
 
   const allc = [...currentUser.route.lookupNodes.values()].flat();
@@ -24,6 +22,7 @@ async function main() {
 
   while (!currentUser.done) {
     await sleep(0.00001);
+    currentUser.route.getGobalStats();
     currentUser.move();
     otherUser.move();
 
