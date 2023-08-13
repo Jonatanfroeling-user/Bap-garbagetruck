@@ -1,6 +1,6 @@
 *.zip
 *node_modules/*
-node_modules
+Docs/node_modules
 __pycache__
 **/__pycache__
 .*
