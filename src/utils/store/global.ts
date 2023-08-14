@@ -14,6 +14,7 @@ type GlobalProps = {
   isDriving: boolean;
   customNavigation: boolean;
   hideHeader: boolean;
+  darkMode: boolean;
 };
 
 type MapProps = {
@@ -31,15 +32,10 @@ type GlobalStoreType = {
     icon: string | null;
   };
   map: MapProps;
-  theme: {
-    darkMode: boolean;
-  };
   route: RouteStoreType;
   actions: {
     setAuthState: (authState: boolean, icon: string) => void;
     setMapProps: (props: Partial<MapProps>) => void;
-    setDarkMode: (darkMode?: boolean) => void;
-    toggleDriveMode: () => void;
     setGlobalProps: (props: Partial<GlobalProps>) => void;
     setRouteProps: (props: Partial<RouteStoreType>) => void;
   };
@@ -53,12 +49,13 @@ export const useGlobalStore = create<GlobalStoreType>()(
         isDriving: true,
         customNavigation: false,
         hideHeader: false,
+        darkMode: false,
       },
       map: {
         type: "base",
-        currentZoom: 5,
+        currentZoom: 18,
         center: [50.746, 3.63],
-        maxZoom: 17,
+        maxZoom: 18,
         minZoom: 13,
       },
       user: {
@@ -72,9 +69,6 @@ export const useGlobalStore = create<GlobalStoreType>()(
         route: {},
         currentStreet: null,
       },
-      theme: {
-        darkMode: false,
-      },
       actions: {
         setAuthState: (loginState: boolean, icon: string) =>
           set(
@@ -85,17 +79,6 @@ export const useGlobalStore = create<GlobalStoreType>()(
             false,
             "setAuthState"
           ),
-
-        setDarkMode: (darkMode?: boolean) =>
-          set(
-            (state) => {
-              state.theme.darkMode =
-                darkMode !== undefined ? darkMode : !state.theme.darkMode;
-            },
-            false,
-            "setDarkMode"
-          ),
-
         setMapProps: (props: Partial<MapProps>) =>
           Object.values(props).some((i) => i !== undefined) &&
           set(
@@ -107,14 +90,6 @@ export const useGlobalStore = create<GlobalStoreType>()(
             },
             false,
             "setMapProps"
-          ),
-        toggleDriveMode: () =>
-          set(
-            (state) => {
-              state.global.driveMode = !state.global.driveMode;
-            },
-            false,
-            "toggleDriveMode"
           ),
         setRouteProps: (props: Partial<RouteStoreType>) =>
           Object.values(props).some((i) => i !== undefined) &&
@@ -149,5 +124,4 @@ export const useStoreActions = () => useGlobalStore((s) => s.actions);
 export const useAuth = () => useGlobalStore((s) => s.user);
 export const useStoreMap = () => useGlobalStore((s) => s.map);
 export const useRoute = () => useGlobalStore((s) => s.route);
-export const useStoreTheme = () => useGlobalStore((s) => s.theme);
 export const useGlobals = () => useGlobalStore((s) => s.global);

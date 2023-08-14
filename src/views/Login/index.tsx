@@ -1,20 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import { Box, Button, Center, Flex, Img, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Img, Text } from "@chakra-ui/react";
 
 import bgImg from "../../assets/app-bg.png";
 import logoImg from "../../assets/logo.svg";
-import { useAuth, useStoreActions } from "../../utils/store/global";
+import { useStoreActions } from "../../utils/store/global";
 import { getUserIconByColor } from "../../utils/helpers";
 
 const LoginPage = () => {
   const [userIcon, setUserIcon] = useState<string>("");
-  const a = useAuth();
-  console.log(a);
   const { setAuthState } = useStoreActions();
 
   const singIn = useCallback(() => {
     if (userIcon) {
-      console.log("login");
       setAuthState(true, userIcon);
     }
   }, [userIcon]);
@@ -26,17 +23,19 @@ const LoginPage = () => {
           key={`truck-item-avatpicker-${name}`}
           w="80px"
           h="80px"
-          border={userIcon === src ? "4px solid #5197fe" : "2px solid white"}
+          border={userIcon === src ? "4px solid #5197fe" : "1px solid white"}
           transition="all 0.2s"
           onClick={() => setUserIcon(src as string)}
           bgImg={src as string}
-          backgroundSize={"130%"}
+          backgroundSize={"120%"}
           backgroundRepeat="no-repeat"
           backgroundPosition="center center"
           borderRadius="md"
+          opacity={userIcon === src ? 1 : 0.8}
           _hover={{
-            scale: 1.2,
+            backgroundSize: "140%",
           }}
+          bgColor={name}
           cursor="pointer"
         />
       )),
@@ -78,7 +77,7 @@ const LoginPage = () => {
         <Text mt={5} fontWeight={500} color={"#111"}>
           Kies een kleur
         </Text>
-        <Flex flexDir="row" gap={5}>
+        <Flex flexDir="row" gap={5} mb={12}>
           {avatarSelect}
         </Flex>
         <Button
@@ -89,8 +88,9 @@ const LoginPage = () => {
           size="lg"
           onClick={() => userIcon && singIn()}
           type="button"
+          transform={"scale(1.5)"}
         >
-          Login
+          Start
         </Button>
       </Center>
     </Flex>

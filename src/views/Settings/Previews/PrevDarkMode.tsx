@@ -2,11 +2,10 @@ import { Center, Text } from "@chakra-ui/react";
 
 import dark from "../../../assets/themes/mode-dark.png";
 import light from "../../../assets/themes/mode-light.png";
-import { useStoreTheme } from "../../../utils/store/global";
+import { useGlobals } from "../../../utils/store/global";
 
 const PrevDarkMode = () => {
-  const { darkMode } = useStoreTheme();
-
+  const { darkMode } = useGlobals();
   return (
     <Center
       w="full"

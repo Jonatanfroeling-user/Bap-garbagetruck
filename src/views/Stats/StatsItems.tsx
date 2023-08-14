@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   CircularProgress,
@@ -8,22 +8,67 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-import { statusDataList } from "../../__mock_data/status";
 import Title from "../../components/Title";
 
+import { RouteIcon } from "../../components/icons/Route";
+import { TruckIcon } from "../../components/icons/Truck";
+
+export type StateItemType = {
+  color?: string;
+  icon: any;
+  heading: string;
+  progressKey: "route" | "load";
+  onClick: () => void;
+};
+
 const StatusItems = () => {
-  const [values, setValues] = useState(statusDataList.map((i) => 0));
+  const [progress, setProgress] = useState({
+    route: 0,
+    load: 0,
+  });
+
+  useEffect(() => {}, []);
+
+  const onStatClick = useCallback(() => {}, []);
+
+  const statusDataList: StateItemType[] = useMemo(
+    () => [
+      {
+        icon: RouteIcon,
+        heading: "Route",
+        progressKey: "route",
+        color: "primary_green",
+
+        onClick: onStatClick,
+      },
+      {
+        icon: TruckIcon,
+        heading: "Lading",
+        progressKey: "load",
+        color: "primary_orange",
+        onClick: onStatClick,
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     // animate percentage growth
-    setValues(statusDataList.map((i) => i.percentage));
+    const intv = setInterval(() => {
+      const { total } = window._progress;
+      setProgress({
+        load: +(total / 1.34).toFixed(0),
+        route: +total.toFixed(1),
+      });
+    }, 500);
+    return () => clearInterval(intv);
   }, []);
 
   return (
     <Box pos="relative">
       <UnorderedList styleType="none">
         {statusDataList.map(
-          ({ onClick, heading, icon: CustomIcon, color }, index) => (
+          ({ onClick, heading, icon: CustomIcon, color, progressKey }) => (
             <ListItem
               key={`StatsItem-item-id-${heading}`}
               as="div"
@@ -36,10 +81,10 @@ const StatusItems = () => {
               <Flex align="center">
                 <Box pr="5">
                   <CircularProgress
-                    value={values[index]}
+                    value={progress[progressKey]}
                     size="120px"
                     thickness="20px"
-                    color={values[index] > 50 ? color : "primary"}
+                    color={progress[progressKey] > 50 ? color : "primary"}
                     className="hoverScale"
                   >
                     <CircularProgressLabel>
@@ -50,7 +95,7 @@ const StatusItems = () => {
                   </CircularProgress>
                 </Box>
                 <Title
-                  text={`${heading} ${values[index]}%`}
+                  text={`${heading} ${progress[progressKey]}%`}
                   size={3}
                   upper={false}
                 />

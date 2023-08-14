@@ -2,10 +2,12 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { ListItemType } from "../../types";
 import { usePreview } from "./usePreview";
 import { useNavigate } from "react-router-dom";
+import { useCurrentPath } from "./useCurrentPath";
 
 function useSelection(items: ListItemType[]) {
   const [selected, setSelected] = useState<string>("");
   const { setPreview } = usePreview();
+  const { id: selectedItemId } = useCurrentPath();
   const navigate = useNavigate();
 
   const ids = useMemo(() => items.map((item) => item.id), [items]);
@@ -55,7 +57,7 @@ function useSelection(items: ListItemType[]) {
     if (items && !selected) {
       onSelect(items[0].id)();
     }
-  }, [Boolean(selected), items]);
+  }, [Boolean(selected), items, selectedItemId]);
 
   return { selected: selected, onSelect: onSelect as any };
 }

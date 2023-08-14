@@ -14,6 +14,18 @@ import {
 
 type ArrayRemoveType = number | string;
 
+export type zoomLevelType = 1 | 2 | 3 | 4;
+export type zoomLevelRevType = 13 | 15 | 16 | 18;
+
+export const zoomLevelsRev: zoomLevelRevType[] = [13, 15, 16, 18];
+
+export const zoomChart = Object.fromEntries(
+  zoomLevelsRev.map((i, idx) => [i, idx + 1])
+);
+export const zoomChartRev = Object.fromEntries(
+  zoomLevelsRev.map((i, idx) => [idx + 1, i])
+);
+
 export const arrayRemove = (
   array: ArrayRemoveType[],
   item: ArrayRemoveType
@@ -83,7 +95,7 @@ export const userIconTable = {
   yellow: iconYellow,
   purple: iconPurple,
   orange: iconOrange,
-  default: iconDefault,
+  green: iconDefault,
 };
 
 export const getUserIconByColor = (col?: UserColorsType) => {

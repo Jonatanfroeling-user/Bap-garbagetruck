@@ -1,7 +1,6 @@
-import L from "leaflet";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TileLayer, useMap } from "react-leaflet";
-import { MapUrlType, getMapUrl } from "./utils";
+import { getMapType } from "./utils";
 import {
   useAuth,
   useStoreActions,
@@ -11,32 +10,31 @@ import useActivity from "../../utils/hooks/useActivity";
 
 import { iniMapFunctions } from "./Features";
 import { TransferRequest } from "./Modals/TransferRequest";
-import { useDisclosure } from "@chakra-ui/react";
+
+type ModalType = {
+  name: string | null;
+  data: any | null;
+};
 
 const Map = () => {
-  const [openModal, setOpenModal] = useState({
-    name: "",
-    data: {} as any,
-  });
+  const map = useMap();
   const { icon } = useAuth();
   const { setGlobalProps } = useStoreActions();
-  const { currentZoom, center, maxZoom, minZoom, type } = useStoreMap();
-  const map = useMap();
-
-  const mapType = useMemo(() => getMapUrl(type), [type]);
+  const { type, center } = useStoreMap();
 
   const { isInactive } = useActivity(map);
-  const [mapUrl, setMapUrl] = useState<MapUrlType>(mapType);
+  const mapTileUrl = useMemo(() => getMapType(type), [type]);
 
-  const changeMapUrl = (url: string) => {
-    setMapUrl(getMapUrl(url));
-  };
+  const [openModal, setOpenModal] = useState<ModalType>({
+    name: null,
+    data: null,
+  });
 
   // reset zoom on innactivity
   useEffect(() => {
     if (isInactive) {
       // recenterMap();
-      // map.setView(center);
+      map.setView(center);
       setGlobalProps({ hideHeader: true });
     } else {
       setGlobalProps({ hideHeader: false });
@@ -44,27 +42,54 @@ const Map = () => {
   }, [isInactive]);
 
   // Modals logic
-  const mapActionModal = useMemo(() => {
-    switch (openModal.name) {
-      case "promptSendRequest":
-        return <TransferRequest data={openModal.data} isOpen={true} />;
-
-      case "promptRecieveRequest":
-        return <TransferRequest data={openModal.data} isOpen={true} />;
-
-      case "sendTransferRequest":
-        return <TransferRequest data={openModal.data} isOpen={true} />;
-      default:
-        return <></>;
-    }
-  }, [openModal]);
-
   const onModalOpen = useCallback((name: string, data: any) => {
     setOpenModal({
       name: name,
       data: data,
     });
   }, []);
+
+  const onModalClose = useCallback(() => {
+    setOpenModal({
+      name: null,
+      data: null,
+    });
+  }, []);
+
+  const mapActionModal = useMemo(() => {
+    if (openModal.name) {
+      switch (openModal.name) {
+        case "promptSendRequest":
+          return (
+            <TransferRequest
+              data={openModal.data}
+              isOpen={true}
+              onClose={onModalClose}
+            />
+          );
+
+        case "promptRecieveRequest":
+          return (
+            <TransferRequest
+              data={openModal.data}
+              isOpen={true}
+              onClose={onModalClose}
+            />
+          );
+
+        case "sendTransferRequest":
+          return (
+            <TransferRequest
+              data={openModal.data}
+              isOpen={true}
+              onClose={onModalClose}
+            />
+          );
+        default:
+          return <></>;
+      }
+    }
+  }, [openModal]);
 
   // init map functionsliaty
   useEffect(() => {
@@ -76,7 +101,7 @@ const Map = () => {
       {mapActionModal}
       <TileLayer
         attribution={`Data by \u0026copy; \u003ca target="_blank" href="http://openstreetmap.org"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target="_blank" href="http://www.openstreetmap.org/copyright"\u003eODbL\u003c/a\u003e.`}
-        url={mapUrl.url}
+        url={mapTileUrl}
       />
     </>
   );

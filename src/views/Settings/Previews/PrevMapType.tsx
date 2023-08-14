@@ -2,7 +2,6 @@ import { Center } from "@chakra-ui/react";
 
 import base from "../../../assets/map-type/map-type-base.png";
 import osm from "../../../assets/map-type/map-type-osm.png";
-
 import { useStoreMap } from "../../../utils/store/global";
 
 const PrevMapType = () => {

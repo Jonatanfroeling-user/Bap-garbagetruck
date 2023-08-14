@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import uniqid from "uniqid";
 
 import PageLayout from "../PageLayout";
@@ -19,60 +19,72 @@ import {
 import PrevExit from "./Previews/PrevExit";
 import { useSimpleToast } from "../../utils/hooks/useToast";
 import PrevMapType from "./Previews/PrevMapType";
-import { BiColorFill } from "react-icons/bi";
+import { LuPaintbrush2 } from "react-icons/lu";
+import { Text } from "@chakra-ui/react";
+import { zoomChart, zoomChartRev } from "../../utils/helpers";
 
 const SettingsPage = ({ pathIdx }: { pathIdx: number }) => {
-  const { setDarkMode, toggleDriveMode, setMapProps } = useStoreActions();
-  const { isDriving } = useGlobals();
-  const { type } = useStoreMap();
+  const { setGlobalProps, setMapProps } = useStoreActions();
+  const { darkMode, driveMode } = useGlobals();
+  const { type, currentZoom } = useStoreMap();
+  const { toastError } = useSimpleToast();
 
-  const { toastError, toastSuccess } = useSimpleToast();
+  const [dark, setDark] = useState(darkMode);
+  const [mapType, setMapType] = useState(type);
+  const [mapDetail, setMapDetail] = useState<number>(
+    // @ts-ignore
+    zoomChart[currentZoom]
+  );
+  const [mode] = useState(driveMode);
 
   const onToggleDriveMode = useCallback(() => {
-    if (isDriving) {
-      toastError(
-        "Stop eerste je wagen voor dat je uit de driver mode kan gaan."
-      );
-    } else {
-      toggleDriveMode();
-    }
-  }, [isDriving]);
-
-  const onToggleDarkMode = useCallback(() => {
-    setDarkMode();
+    toastError("Stop eerste je wagen voor dat je uit de driver mode kan gaan.");
   }, []);
 
-  const onToggleMapType = useCallback(() => {
-    setMapProps({ type: type === "osm" ? "base" : "osm" });
-  }, [type]);
+  const onSetMapType = useCallback(() => {
+    setMapType(mapType === "osm" ? "base" : "osm");
+  }, [mapType]);
+
+  const onSetMapDetail = useCallback(() => {
+    setMapDetail(mapDetail >= 4 ? 1 : mapDetail + 1);
+  }, [mapDetail]);
+
+  const onSetDarkMode = useCallback(() => {
+    setDark(!dark);
+  }, [dark]);
 
   const settingItems = useMemo<ListItemType[]>(
     () => [
       {
-        id: uniqid(),
+        id: "setting-detail",
         text: "Kaart detail",
-        children: <PrevMapDetail />,
+        children: (
+          <Text cursor="pointer" fontWeight={400}>
+            {mapDetail}
+          </Text>
+        ),
+        preview: <PrevMapDetail />,
         background: "primary",
+        onClick: onSetMapDetail,
       },
       {
-        id: uniqid(),
+        id: "setting-type",
         text: "Type Kaart",
-        children: <BiColorFill />,
+        children: <LuPaintbrush2 color="black" />,
         preview: <PrevMapType />,
         background: "white",
-        onClick: onToggleMapType,
+        onClick: onSetMapType,
       },
       {
-        id: uniqid(),
+        id: "setting-darkmode",
         img: iconBW,
         text: "Thema",
         preview: <PrevDarkMode />,
         background: "black",
-        onClick: onToggleDarkMode,
+        onClick: onSetDarkMode,
       },
       {
-        id: uniqid(),
-        type: "obstacle",
+        id: "setting-exit",
         img: iconExit,
         text: "Exit ",
         preview: <PrevExit />,
@@ -80,10 +92,18 @@ const SettingsPage = ({ pathIdx }: { pathIdx: number }) => {
         onClick: onToggleDriveMode,
       },
     ],
-    []
+    [dark, mapType, mapDetail, mode]
   );
 
   const { selected, onSelect } = useSelection(settingItems);
+
+  useEffect(() => {
+    setGlobalProps({ darkMode: dark, driveMode: mode });
+    setMapProps({
+      type: mapType,
+      currentZoom: zoomChartRev[mapDetail],
+    });
+  }, [dark, mapType, mapDetail, mode]);
 
   return (
     <PageLayout pathIndex={pathIdx}>
