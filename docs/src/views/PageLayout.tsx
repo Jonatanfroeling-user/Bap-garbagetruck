@@ -4,10 +4,13 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { usePreviousLocation } from "../utils/providers/LocationProvider";
 
-import PageContentLayout from "./PageContentLayout";
+import PageLayoutContent from "./PageLayoutContent";
 import Header, { HeaderHeight } from "./Header";
 import { slideVariants } from "../config/slideVariants";
+import { PreviewProvider } from "../utils/providers/previewProvider";
+import { useGlobals } from "../utils/store/global";
 
+// Provides padding and motion effect fo each page
 const PageLayout = ({
   pathIndex,
   children,
@@ -16,6 +19,7 @@ const PageLayout = ({
   children: ReactNode;
 }) => {
   const { previousIndex, currentIndex } = usePreviousLocation();
+  const { hideHeader } = useGlobals();
 
   const isForwardNavigation =
     pathIndex < currentIndex ||
@@ -35,11 +39,18 @@ const PageLayout = ({
           width: "100%",
         }}
       >
-        <Flex align="start" h="full" w="full" zIndex={0} pt={HeaderHeight}>
+        <Flex
+          align="start"
+          h="full"
+          w="full"
+          zIndex={0}
+          pt={hideHeader ? 0 : HeaderHeight}
+        >
           {window.location.href.includes("home") ? (
+            // home does not need PageLayoutContent as it needds to be a full width map
             children
           ) : (
-            <PageContentLayout>{children}</PageContentLayout>
+            <PageLayoutContent>{children}</PageLayoutContent>
           )}
         </Flex>
       </motion.div>

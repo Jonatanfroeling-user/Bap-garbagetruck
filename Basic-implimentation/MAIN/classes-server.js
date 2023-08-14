@@ -45,7 +45,7 @@ class ServerClass {
 
   // assing routes, would be normally done in beginning of day or on request or by admin
   assignRoute(userId, routeId) {
-    const user = JSON.copy(this.users[userId]);
+    const user = JSON.parse(JSON.stringify(this.users[userId]));
     const route = new RouteClass(routeId, user);
     this.users[userId].activeRoute = routeId;
 

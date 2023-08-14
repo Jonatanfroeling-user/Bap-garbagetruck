@@ -29,7 +29,7 @@ export const ItemsList = ({
   const itemsArray = useMemo(
     () =>
       items.map((item, index) => {
-        const isSelected = !selected ? index === 0 : selected === item.id;
+        const isSelected = selected === item.id;
         return (
           <ListItem
             key={`list-item-${item.id}`}
@@ -37,8 +37,10 @@ export const ItemsList = ({
             data-key={`clickable-${item.id}`}
             as="div"
             onClick={() => {
-              onSelect(item.id);
-              item.onClick();
+              if (isSelected && item.onClick) {
+                item.onClick();
+              }
+              onSelect(item.id)();
             }}
             borderBottom="1px"
             borderColor="border"
@@ -73,7 +75,7 @@ export const ItemsList = ({
   }, [itemsArray]);
 
   return (
-    <Box pos="relative">
+    <Box pos="relative" mb="80px">
       {changableOrder && (
         <Box pos="absolute" left="700px" zIndex={20}>
           <Button

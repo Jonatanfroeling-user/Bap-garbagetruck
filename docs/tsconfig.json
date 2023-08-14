@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "**/*.ts", "**/*.tsx", "src/assets/**/*"],
+  "include": ["src", "**/*.ts", "**/*.tsx", "src/assets/**/*", "src/views/Map/Features/functionality.min.js"],
   "exclude": ["node_modules", "babel.config.js"]
 }

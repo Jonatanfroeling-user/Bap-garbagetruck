@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import Title from "../Title";
-import { notificationsData } from "../../data/mocks/notifications";
+import { notificationsData } from "../../__mock_data/notifications";
 import NotificationItem from "./NotificationItem";
 
 const Notifications = () => {

@@ -5,16 +5,16 @@ import { Box, Flex } from "@chakra-ui/react";
 import HeaderItem from "./HeaderItem";
 import { routes } from "../../Routes";
 import { useCurrentPath } from "../../utils/hooks/useCurrentPath";
+import { useGlobals } from "../../utils/store/global";
 
 export const HeaderHeight = "100px";
 
 const Header = () => {
   const { currentPath } = useCurrentPath();
+  const { customNavigation, hideHeader } = useGlobals();
 
   const handleHorizontalKeyPress = useCallback(
-    (e: KeyboardEvent) => {
-      const { key } = e;
-
+    ({ key }: KeyboardEvent) => {
       // Concept is to put the 2D routes array horizontal and nivate between them using the index
       if (key === "ArrowRight") {
         const idx = routes.findIndex(({ path }) => path === currentPath) + 1;
@@ -31,12 +31,14 @@ const Header = () => {
   );
 
   useEffect(() => {
+    if (customNavigation) return;
+
     window.addEventListener("keydown", handleHorizontalKeyPress);
 
     return () => {
       window.removeEventListener("keydown", handleHorizontalKeyPress);
     };
-  }, [handleHorizontalKeyPress]);
+  }, [handleHorizontalKeyPress, customNavigation]);
 
   return (
     <Box
@@ -46,12 +48,15 @@ const Header = () => {
       bg="white"
       borderBottom="1px solid gray"
       zIndex={999999}
+      transition="all 1s"
+      height={hideHeader ? 0 : HeaderHeight}
+      opacity={hideHeader ? 0 : 1}
     >
       <Flex
+        h="full"
         flexDir="row"
         justifyContent="space-between"
         width="100%"
-        height={HeaderHeight}
         flexWrap="wrap"
         gap="1px"
       >
@@ -60,7 +65,7 @@ const Header = () => {
             key={`header-item-${path}`}
             icon={icon}
             path={path}
-            isSelected={path === currentPath}
+            isSelected={currentPath === path}
           />
         ))}
       </Flex>

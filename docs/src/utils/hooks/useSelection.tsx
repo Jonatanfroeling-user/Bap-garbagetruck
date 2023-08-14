@@ -1,8 +1,12 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { ListItemType } from "../../types";
+import { usePreview } from "./usePreview";
+import { useNavigate } from "react-router-dom";
 
 function useSelection(items: ListItemType[]) {
-  const [selected, setSelected] = useState<string>(items[0].id);
+  const [selected, setSelected] = useState<string>("");
+  const { setPreview } = usePreview();
+  const navigate = useNavigate();
 
   const ids = useMemo(() => items.map((item) => item.id), [items]);
 
@@ -35,9 +39,23 @@ function useSelection(items: ListItemType[]) {
   }, [handleUserKeyPress]);
 
   const onSelect = useCallback(
-    (itemId: string) => () => setSelected(itemId),
-    []
+    (itemId: string) => () => {
+      const item = items.find((i) => i.id === itemId);
+      if (item) {
+        setSelected(itemId);
+        setPreview(item.preview);
+        navigate(`?$id=${itemId}`);
+      }
+    },
+    [items]
   );
+
+  // init selected
+  useEffect(() => {
+    if (items && !selected) {
+      onSelect(items[0].id)();
+    }
+  }, [Boolean(selected), items]);
 
   return { selected: selected, onSelect: onSelect as any };
 }

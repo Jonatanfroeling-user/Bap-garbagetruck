@@ -1,14 +1,14 @@
 // lightweight utility. Could be merged with the custom useLocation but this would not be optimal
 export function useCurrentPath() {
-  const path = window.location.hash?.split("#")[1] ?? "";
+  const match = window.location.href.match(/\/#\/([^?]+)/);
+  const pageTitle = match ? match[1] : "";
+  const path = `/${pageTitle}`;
 
-  const isActivePage = (_path: string) => path === _path;
-  const extractPath = (_path: string) => _path.split("/")[1];
+  const isActivePage = (_path: string) => path.includes(_path);
 
   return {
     currentPath: path,
-    currentPage: path.split("/")[1],
+    currentPage: pageTitle,
     isActivePage: isActivePage,
-    extractPath: extractPath,
   };
 }

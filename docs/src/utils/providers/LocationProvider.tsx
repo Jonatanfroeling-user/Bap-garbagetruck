@@ -23,7 +23,6 @@ const LocationProvider = ({ children }: { children: ReactNode }) => {
     previousIndex: -1,
   });
   const prevPathRef = useRef<string>("");
-
   const { hash } = useLocation();
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const LocationProvider = ({ children }: { children: ReactNode }) => {
       const prev = pathHistory[pathHistory.length - 1];
 
       setContext({
-        currentIndex: routes.findIndex((route) => route.path === hash),
+        currentIndex: routes.findIndex((route) => hash.includes(route.path)),
         previousIndex:
           (prev && routes.findIndex((route) => route.path === prev)) || -1,
       });

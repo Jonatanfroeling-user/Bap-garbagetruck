@@ -8,9 +8,9 @@ type SquareProps = {
   size?: ItemSizeType;
   bgImg?: string;
   background?: string;
-  outline?: string;
+  outline?: string | null;
   icon?: IconType;
-
+  bgContain?: boolean;
   children?: ReactNode;
 };
 
@@ -21,6 +21,7 @@ const SquareItem = ({
   bgImg,
   icon: Icon,
   children,
+  bgContain = false,
 }: SquareProps) => {
   const [sizePx, sizeNr] = getItemSizeArray(size);
 
@@ -34,9 +35,16 @@ const SquareItem = ({
       bg={background}
       overflow="hidden"
       pos="relative"
-      border={`${size * 1.5}px solid`}
-      borderColor={outline.includes("primary") ? outline : "white"}
+      border={outline === null ? undefined : `${size * 1.5}px solid`}
+      borderColor={
+        outline === null
+          ? undefined
+          : outline.includes("primary")
+          ? outline
+          : "white"
+      }
       transition="all 0s"
+      cursor="pointer"
     >
       <Box
         w="150%"
@@ -48,7 +56,7 @@ const SquareItem = ({
         overflow="hidden"
         transform="rotate(-45deg)"
         backgroundImage={bgImg}
-        backgroundSize="cover"
+        backgroundSize={bgContain ? "contain" : "cover"}
         // backgroundSize="90%"
         backgroundRepeat="no-repeat"
         backgroundPosition="top"
@@ -64,7 +72,7 @@ const SquareItem = ({
             transform="translate(-50%, -50%)"
           >
             {children}
-            {Icon && <Icon />}
+            {Icon && <Icon color="white" />}
           </Box>
         )}
       </Box>

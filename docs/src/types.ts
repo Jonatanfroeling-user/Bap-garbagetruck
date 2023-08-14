@@ -19,6 +19,8 @@ export type ItemTypes = {
 export type ItemSizesArray = [string, number, string];
 export type ItemSizeString = "sm" | "md" | "lg" | "xl" | "xxl";
 
+export type UserColorsType = "default" | "orange" | "purple" | "red" | "yellow";
+
 export type ItemSizeType = 1 | 2 | 3 | 4 | 5;
 
 export type UserRoleType = "admin" | "driver" | undefined;
@@ -52,7 +54,8 @@ export type ListItemType = {
   img?: string;
   // render full component
   children?: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  preview?: ReactNode | string;
 };
 
 export type StateItemType = {
