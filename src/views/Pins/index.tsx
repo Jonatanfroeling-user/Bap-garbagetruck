@@ -1,21 +1,29 @@
 import { useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 import useSelection from "../../utils/hooks/useSelection";
 import { getColorsByType } from "../../utils/helpers";
 import { pinsDataList } from "../../__mock_data/pins";
-
 import PageLayout from "../PageLayout";
 import { ItemsList } from "../../components/List";
-import { ListItemType, PinItemType } from "../../types";
-import { usePreview } from "../../utils/hooks/usePreview";
+import { ListItemType } from "../../types";
 
 const PinsPage = ({ pathIdx }: { pathIdx: number }) => {
+  const navigate = useNavigate();
+
+  const onClick = useCallback(
+    (type: string) => () => {
+      navigate("/home/" + type);
+    },
+    []
+  );
+
   const pins = useMemo<ListItemType[]>(
     () =>
       pinsDataList.map((pinItem): ListItemType => {
         const { background, outline } = getColorsByType(pinItem.type);
         return {
-          onClick: () => pinItem,
+          onClick: onClick(pinItem.type),
           id: pinItem.id,
           background: background,
           outline: outline,

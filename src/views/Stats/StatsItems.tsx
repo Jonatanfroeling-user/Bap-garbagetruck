@@ -56,11 +56,13 @@ const StatusItems = () => {
     // animate percentage growth
     const intv = setInterval(() => {
       const { total } = window._progress;
-      setProgress({
-        load: +(total / 1.34).toFixed(0),
-        route: +total.toFixed(1),
-      });
-    }, 500);
+      if (total) {
+        setProgress({
+          load: +(total / 1.34).toFixed(0),
+          route: +total.toFixed(1),
+        });
+      }
+    }, 300);
     return () => clearInterval(intv);
   }, []);
 

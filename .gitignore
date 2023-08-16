@@ -1,16 +1,4 @@
 *.zip
-*node_modules/*
-Docs/node_modules
-__pycache__
-**/__pycache__
-.*
-.
-.DS_Store
-..
-!/.*
-
-
-*.zip
 node_modules
 __pycache__
 **/__pycache__
@@ -18,3 +6,5 @@ __pycache__
 .
 .DS_Store
 ..
+!/.env.example
+!/.gitignore

@@ -72,3 +72,21 @@ body, html {
 .shaded {
   box-shadow: 0 2px 3px  0px rgb(198, 198, 198);
 }
+
+
+
+/* custmon marker */
+.custom-marker {
+  width: 32px;
+  height: 48px;
+  background-color: #FFF;
+  color: black;
+  border-radius: 50%; 
+  position: relative;
+  &-danger {
+      background-color: #f38800;
+  }
+  &-info {
+    background-color: #5197fe;
+  }
+}

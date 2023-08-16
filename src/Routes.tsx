@@ -37,7 +37,7 @@ export const routes: RouteItemType[] = [
     element: ContactPage,
   },
   {
-    path: "/home",
+    path: "/home/:pinType?",
     icon: <LogoIcon size={6} />,
     element: HomePage,
   },
