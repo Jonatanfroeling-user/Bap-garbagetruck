@@ -1,3 +1,17 @@
+type user = {
+  name: string;
+  color?: string;
+  user?: any;
+  route?: any;
+  destinations?: any;
+  id?: string;
+  truck?: any;
+  done?: any;
+  position?: [number, number];
+  currentDestination?: any;
+  pendingActions?: any;
+};
+
 interface Window {
   _MAP: any;
   _progress: {
@@ -5,12 +19,13 @@ interface Window {
     [key: string]: number;
   };
   _users: {
-    currentUser: any;
-    otherUser: any;
+    currentUser: user;
+    otherUser: user;
+    [key: string]: user;
   };
   //   L: LType;
 
-  // declare custom fucntion to heasally handle map interactions between .tsx and .js
+  // declare custom fucntion to handle map interactions between .tsx and .js
   _mapFunctions: {
     createMarker: (
       id: string,
@@ -26,6 +41,6 @@ interface Window {
       wayId: string,
       wayStreetName: string,
       fullStreet: boolean
-    ) => voic;
+    ) => void;
   };
 }

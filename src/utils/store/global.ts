@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import { ContactType } from "../../types";
 
 type RouteStoreType = {
   done: number;
@@ -28,13 +29,12 @@ type GlobalStoreType = {
   global: GlobalProps;
   user: {
     isLoggedIn: boolean;
-    color: string | null;
-    icon: string | null;
+    user: ContactType | null;
   };
   map: MapProps;
   route: RouteStoreType;
   actions: {
-    setAuthState: (authState: boolean, icon: string) => void;
+    setAuthState: (authState: boolean, user: ContactType) => void;
     setMapProps: (props: Partial<MapProps>) => void;
     setGlobalProps: (props: Partial<GlobalProps>) => void;
     setRouteProps: (props: Partial<RouteStoreType>) => void;
@@ -60,8 +60,7 @@ export const useGlobalStore = create<GlobalStoreType>()(
       },
       user: {
         isLoggedIn: false,
-        color: null,
-        icon: null,
+        user: null,
       },
       route: {
         done: 0,
@@ -70,11 +69,11 @@ export const useGlobalStore = create<GlobalStoreType>()(
         currentStreet: null,
       },
       actions: {
-        setAuthState: (loginState: boolean, icon: string) =>
+        setAuthState: (loginState: boolean, user: ContactType) =>
           set(
             (state) => {
               state.user.isLoggedIn = loginState;
-              state.user.icon = loginState ? icon : null;
+              state.user.user = loginState ? user : null;
             },
             false,
             "setAuthState"

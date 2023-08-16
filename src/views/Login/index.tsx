@@ -1,45 +1,56 @@
 import { useCallback, useMemo, useState } from "react";
-import { Box, Button, Center, Flex, Img, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Img, Input, Text } from "@chakra-ui/react";
 
 import bgImg from "../../assets/app-bg.png";
 import logoImg from "../../assets/logo.svg";
 import { useStoreActions } from "../../utils/store/global";
-import { getUserIconByColor } from "../../utils/helpers";
+import { contactsList } from "../../__mock_data/users";
+import { ContactType } from "../../types";
 
 const LoginPage = () => {
-  const [userIcon, setUserIcon] = useState<string>("");
+  const [selectedUser, setsSlectedUser] = useState<ContactType | null>(null);
   const { setAuthState } = useStoreActions();
 
+  const onCLick = useCallback(
+    (user: ContactType) => () => {
+      setsSlectedUser(user);
+    },
+    []
+  );
   const singIn = useCallback(() => {
-    if (userIcon) {
-      setAuthState(true, userIcon);
+    if (selectedUser) {
+      setAuthState(true, selectedUser);
     }
-  }, [userIcon]);
+  }, [selectedUser]);
 
   const avatarSelect = useMemo(
     () =>
-      Object.entries(getUserIconByColor()).map(([name, src]) => (
+      contactsList.map((user) => (
         <Box
-          key={`truck-item-avatpicker-${name}`}
+          key={`truck-item-avatar-picker-${user.id}`}
           w="80px"
           h="80px"
-          border={userIcon === src ? "4px solid #5197fe" : "1px solid white"}
+          border={
+            selectedUser?.id === user.id
+              ? "4px solid #5197fe"
+              : "1px solid white"
+          }
           transition="all 0.2s"
-          onClick={() => setUserIcon(src as string)}
-          bgImg={src as string}
+          onClick={onCLick(user)}
+          bgImg={user.truckIcon}
           backgroundSize={"120%"}
           backgroundRepeat="no-repeat"
           backgroundPosition="center center"
           borderRadius="md"
-          opacity={userIcon === src ? 1 : 0.8}
+          opacity={selectedUser?.id === user.id ? 1 : 0.8}
           _hover={{
             backgroundSize: "140%",
           }}
-          bgColor={name}
+          bgColor={user.color}
           cursor="pointer"
         />
       )),
-    [userIcon]
+    [selectedUser]
   );
 
   return (
@@ -77,16 +88,30 @@ const LoginPage = () => {
         <Text mt={5} fontWeight={500} color={"#111"}>
           Kies een kleur
         </Text>
-        <Flex flexDir="row" gap={5} mb={12}>
+        <Flex flexDir="row" gap={5}>
           {avatarSelect}
         </Flex>
+        <Box
+          my={2}
+          fontWeight={800}
+          borderWidth={"2px"}
+          borderColor={selectedUser?.color || "#eee"}
+          transition="all 0.2s"
+          w="8rem"
+          textShadow="md"
+          textAlign="center"
+          borderRadius="md"
+          py={1}
+        >
+          {selectedUser?.name ?? "Select"}
+        </Box>
         <Button
-          mt={2}
+          mt={10}
           bg="primary"
           color="white"
           _hover={{ bg: "primary_light" }}
           size="lg"
-          onClick={() => userIcon && singIn()}
+          onClick={() => selectedUser && singIn()}
           type="button"
           transform={"scale(1.5)"}
         >

@@ -32,9 +32,16 @@ export type ContactType = {
   name: string;
   type: "depot" | "user";
   role?: UserRoleType;
+  // profile picture
   avatar?: string;
   icon?: IconType;
   phone?: string;
+  // user preffered color
+  color?: UserColorsType;
+  // icon for his truck on the map
+  truckIcon?: string;
+  // if you can pick for the demo app
+  isSelectableForDemo?: boolean;
 };
 
 export type HeaderItemType = {

@@ -18,9 +18,10 @@ type ModalType = {
 
 const Map = () => {
   const map = useMap();
-  const { icon } = useAuth();
+  const { user } = useAuth();
+
   const { setGlobalProps } = useStoreActions();
-  const { type, center } = useStoreMap();
+  const { type, currentZoom } = useStoreMap();
 
   const { isInactive } = useActivity(map);
   const mapTileUrl = useMemo(() => getMapType(type), [type]);
@@ -29,16 +30,42 @@ const Map = () => {
     name: null,
     data: null,
   });
+  const recenterMap = useCallback(() => {
+    const position = window._users?.currentUser?.position;
+
+    if (position && position[0]) {
+      const smoothCoords = position.map((i) => +i.toFixed(3));
+      const smoothCurrent = Object.values(map.getCenter()).map(
+        (i) => +i.toFixed(3)
+      );
+
+      if (String(smoothCoords) !== String(smoothCurrent)) {
+        // setMapProps({ center: position });
+        map.flyTo(smoothCoords as any, currentZoom, {
+          // is triggerd about every 5 sec
+          duration: 5,
+          easeLinearity: 0.9,
+        });
+      }
+    }
+  }, [currentZoom]);
 
   // reset zoom on innactivity
   useEffect(() => {
+    // @ts-ignore
+    let interval = null;
     if (isInactive) {
-      // recenterMap();
-      map.setView(center);
+      interval = setInterval(() => {
+        recenterMap();
+      }, 1000);
       setGlobalProps({ hideHeader: true });
     } else {
       setGlobalProps({ hideHeader: false });
     }
+    return () => {
+      // @ts-ignore
+      clearInterval(interval);
+    };
   }, [isInactive]);
 
   // Modals logic
@@ -93,8 +120,13 @@ const Map = () => {
 
   // init map functionsliaty
   useEffect(() => {
-    map && iniMapFunctions(map, onModalOpen, icon as string);
-  }, [Boolean(map)]);
+    if (user && !window._users?.currentUser) {
+      map && iniMapFunctions(map, onModalOpen, user);
+      setTimeout(() => {
+        recenterMap();
+      }, 200);
+    }
+  }, [Boolean(map), Boolean(user)]);
 
   return (
     <>

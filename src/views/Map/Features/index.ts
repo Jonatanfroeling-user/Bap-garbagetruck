@@ -6,28 +6,36 @@ import iconTruckB from "../../../assets/avatars/red.png";
 
 // @ts-ignore
 import { initWithMap } from "./functionality.min.js";
+import { contactsList } from "../../../__mock_data/users";
+import { ContactType } from "../../../types";
 // L_NO_TOUCH = true;
 // L_DISABLE_3D = true;
 
 const iniMapFunctions = (
   Map: any,
   openModal: (name: string, data: unknown) => void,
-  iconA: string
+  currentUser: ContactType
 ) => {
-  // window._MAP = Map;
-
-  L.Marker.prototype.options.icon = L.icon({
-    iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png", //"https://pngimg.com/uploads/dot/small/dot_PNG29.png"
-  });
-
   window._progress = {
     total: 0,
   };
 
+  // @ts-ignore
   window._users = {
-    currentUser: null,
-    otherUser: null,
+    currentUser: {
+      name: currentUser.name,
+    },
+    otherUser: {
+      name: "",
+    },
   };
+  // set all window users
+  for (let { name, color, isSelectableForDemo, id } of contactsList) {
+    if (isSelectableForDemo && id !== currentUser.id)
+      window._users[name] = {
+        name,
+      };
+  }
   for (let { name } of Object.values(routeData)) {
     window._progress[name] = 0;
   }
@@ -62,7 +70,7 @@ const iniMapFunctions = (
     sendTransferRequest: (data: any) => openModal("sendTransferRequest", data),
   };
 
-  initWithMap(Map, locationData, routeData, iconA, iconTruckB);
+  initWithMap(Map, locationData, routeData, currentUser, iconTruckB);
 };
 
 export { iniMapFunctions };
