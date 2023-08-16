@@ -10,6 +10,11 @@ type user = {
   position?: [number, number];
   currentDestination?: any;
   pendingActions?: any;
+
+  recieveTransferRequest?: any;
+  sendTransferRequest?: any;
+  sendTransferResponse?: any;
+  recieveTransferResponse?: any;
 };
 
 interface Window {
@@ -29,18 +34,13 @@ interface Window {
   _mapFunctions: {
     createMarker: (
       id: string,
+      street: any,
       coords: [number, number],
       color = "#00ff00",
       width = 8
     ) => void;
-    promptSendRequest: (id: string) => void;
-    promptRecieveRequest: (data: any, name: string) => void;
-    sendTransferRequest: (
-      from: string,
-      to: string,
-      wayId: string,
-      wayStreetName: string,
-      fullStreet: boolean
-    ) => void;
+    promptSendRequest: any;
+    promptRecieveRequest: any;
+    sendTransferRequest: any;
   };
 }

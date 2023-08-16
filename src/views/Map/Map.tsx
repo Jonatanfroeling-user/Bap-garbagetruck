@@ -9,7 +9,8 @@ import {
 import useActivity from "../../utils/hooks/useActivity";
 
 import { iniMapFunctions } from "./Features";
-import { TransferRequest } from "./Modals/TransferRequest";
+import { OpenTransferRequest } from "./Modals/OpenTransferRequest";
+import { RecieveTransferRequest } from "./Modals/RecieveTransferRequest";
 
 type ModalType = {
   name: string | null;
@@ -84,11 +85,11 @@ const Map = () => {
   }, []);
 
   const mapActionModal = useMemo(() => {
-    if (openModal.name) {
+    if (openModal.name && openModal.data) {
       switch (openModal.name) {
         case "promptSendRequest":
           return (
-            <TransferRequest
+            <OpenTransferRequest
               data={openModal.data}
               isOpen={true}
               onClose={onModalClose}
@@ -97,16 +98,16 @@ const Map = () => {
 
         case "promptRecieveRequest":
           return (
-            <TransferRequest
+            <RecieveTransferRequest
               data={openModal.data}
               isOpen={true}
               onClose={onModalClose}
             />
           );
 
-        case "sendTransferRequest":
+        case "---sendTransferRequest":
           return (
-            <TransferRequest
+            <OpenTransferRequest
               data={openModal.data}
               isOpen={true}
               onClose={onModalClose}
